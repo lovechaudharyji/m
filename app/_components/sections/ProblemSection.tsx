@@ -4,7 +4,7 @@ import { Icon, Reveal } from "@/app/_components/shared";
 
 export default function ProblemSection() {
   return (
-    <section className="relative overflow-hidden py-14 sm:py-20 bg-[linear-gradient(180deg,rgba(14,165,233,0.62)_0%,rgba(56,189,248,0.22)_38%,rgba(224,242,254,1)_70%,rgba(255,255,255,1)_100%)]">
+    <section className="relative overflow-hidden py-14 sm:py-20 bg-[linear-gradient(180deg,#ffffff_0%,#e0f2fe_35%,#7dd3fc_60%,#0ea5e9_100%)]">
       <div className="mx-auto w-full max-w-6xl px-5">
         <Reveal className="text-center">
           <h2 className="font-heading text-3xl font-extrabold tracking-tight text-navy sm:text-4xl md:text-5xl">

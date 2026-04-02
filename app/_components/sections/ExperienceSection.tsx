@@ -6,7 +6,7 @@ export default function ExperienceSection() {
   return (
     <section
       id="experience"
-      className="relative overflow-hidden py-14 sm:py-20 bg-[linear-gradient(180deg,rgba(255,255,255,1)_0%,rgba(224,242,254,1)_35%,rgba(56,189,248,0.22)_60%,rgba(14,165,233,0.62)_100%)]"
+      className="relative overflow-hidden py-14 sm:py-20 bg-[linear-gradient(180deg,#0ea5e9_0%,#7dd3fc_38%,#e0f2fe_70%,#ffffff_100%)]"
     >
       <div className="mx-auto w-full max-w-6xl px-5">
         <Reveal className="flex flex-col items-center text-center">

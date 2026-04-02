@@ -31,8 +31,7 @@ const steps = [
 
 export default function BlueprintSection() {
   return (
-    <section className="relative overflow-hidden py-14 sm:py-20">
-      <div className="absolute inset-0 -z-10 bg-[radial-gradient(900px_circle_at_50%_0%,rgba(2,132,199,0.22),transparent_55%),linear-gradient(180deg,#07101f,#0b1630)]" />
+    <section className="relative py-14 sm:py-20">
       <div className="mx-auto w-full max-w-6xl px-5">
         <Reveal className="text-center">
           <h2 className="font-heading text-3xl font-extrabold tracking-tight text-white sm:text-4xl md:text-5xl">

@@ -12,12 +12,8 @@ export default function GallerySection() {
   return (
     <section id="gallery" className="mx-auto w-full max-w-6xl px-5 py-14 sm:py-20">
       <Reveal className="flex flex-col items-center text-center">
-        <h2 className="font-heading text-3xl font-extrabold tracking-tight text-navy sm:text-4xl">
-          Gallery
-        </h2>
-        <p className="mt-3 max-w-2xl text-base leading-7 text-foreground/75 sm:text-lg">
-          This could be your next weekend.
-        </p>
+        <h2 className="font-heading text-3xl font-extrabold tracking-tight text-white sm:text-4xl">Gallery</h2>
+        <p className="mt-3 max-w-2xl text-base leading-7 text-white/70 sm:text-lg">This could be your next weekend.</p>
       </Reveal>
 
       <div className="mt-10 grid gap-4 md:grid-cols-3">
@@ -25,7 +21,7 @@ export default function GallerySection() {
           <Reveal
             key={img.label}
             delayMs={60 * idx}
-            className="group relative overflow-hidden rounded-3xl border border-border bg-card/70 shadow-sm backdrop-blur"
+            className="group relative overflow-hidden rounded-3xl border border-white/10 bg-white/[0.08] shadow-[0_30px_90px_rgba(0,0,0,0.45)] backdrop-blur"
           >
             <div
               className="aspect-[4/5] w-full bg-cover bg-center transition duration-700 group-hover:scale-105"

@@ -31,7 +31,7 @@ const steps = [
 
 export default function BlueprintSection() {
   return (
-    <section className="relative py-14 sm:py-20">
+    <section id="itinerary" className="relative py-14 sm:py-20">
       <div className="mx-auto w-full max-w-6xl px-5">
         <Reveal className="text-center">
           <h2 className="font-heading text-3xl font-extrabold tracking-tight text-white sm:text-4xl md:text-5xl">

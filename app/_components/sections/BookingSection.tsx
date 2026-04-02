@@ -46,10 +46,9 @@ export default function BookingSection({ whatsappHref }: BookingSectionProps) {
   );
 
   return (
-    <section id="booking" className="relative overflow-hidden py-14 sm:py-20">
-      <div className="absolute inset-0 -z-10 bg-[radial-gradient(900px_circle_at_10%_0%,rgba(14,165,233,0.18),transparent_60%),radial-gradient(900px_circle_at_90%_20%,rgba(2,132,199,0.16),transparent_60%),linear-gradient(180deg,rgba(255,255,255,1),rgba(255,255,255,1))]" />
+    <section id="booking" className="relative bg-white py-14 sm:py-20">
       <div className="mx-auto w-full max-w-6xl px-5">
-        <Reveal className="grid gap-8 rounded-3xl border border-border bg-card p-8 shadow-[0_30px_80px_rgba(15,23,42,0.14)] backdrop-blur-xl lg:grid-cols-2 lg:items-center lg:p-10">
+        <Reveal className="grid gap-8 rounded-3xl border border-border bg-white p-8 shadow-[0_30px_80px_rgba(15,23,42,0.14)] lg:grid-cols-2 lg:items-center lg:p-10">
           <div>
             <h2 className="font-heading text-3xl font-extrabold tracking-tight text-navy sm:text-4xl md:text-5xl">
               Don&apos;t Scroll.
@@ -78,7 +77,7 @@ export default function BookingSection({ whatsappHref }: BookingSectionProps) {
             </div>
           </div>
 
-          <div className="rounded-3xl border border-border bg-white/70 p-6 backdrop-blur-xl sm:p-8">
+          <div className="rounded-3xl border border-border bg-white p-6 sm:p-8">
             <div className="text-center">
               <div className="font-heading text-2xl font-extrabold text-navy sm:text-3xl">
                 Reserve Your Spot

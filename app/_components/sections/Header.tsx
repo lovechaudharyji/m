@@ -17,20 +17,17 @@ export default function Header({ brandName }: HeaderProps) {
         </a>
 
         <nav className="hidden items-center gap-6 text-sm text-foreground/80 md:flex">
-          <a href="#experience" className="hover:text-foreground">
-            Experience
+          <a href="#" className="hover:text-foreground">
+            Home
           </a>
-          <a href="#pricing" className="hover:text-foreground">
-            Pricing
+          <a href="#experience" className="hover:text-foreground">
+            About
           </a>
           <a href="#itinerary" className="hover:text-foreground">
             Itinerary
           </a>
-          <a href="#gallery" className="hover:text-foreground">
-            Gallery
-          </a>
-          <a href="#booking" className="hover:text-foreground">
-            Reserve
+          <a href="#contact" className="hover:text-foreground">
+            Contact
           </a>
         </nav>
 

@@ -34,8 +34,7 @@ export default function FaqSection() {
   const [openIndex, setOpenIndex] = useState<number | null>(0);
 
   return (
-    <section id="faq" className="relative overflow-hidden py-14 sm:py-20">
-      <div className="absolute inset-0 -z-10 bg-[radial-gradient(900px_circle_at_10%_0%,rgba(14,165,233,0.14),transparent_60%),radial-gradient(900px_circle_at_90%_10%,rgba(2,132,199,0.12),transparent_60%),linear-gradient(180deg,rgba(255,255,255,1),rgba(255,255,255,1))]" />
+    <section id="faq" className="relative bg-white py-14 sm:py-20">
       <div className="mx-auto w-full max-w-6xl px-5">
         <Reveal className="mx-auto max-w-3xl text-center">
           <div className="font-heading text-sm font-extrabold tracking-widest text-brand uppercase">
@@ -49,7 +48,7 @@ export default function FaqSection() {
           </p>
         </Reveal>
 
-        <div className="mx-auto mt-10 max-w-3xl space-y-4">
+        <div className="mx-auto mt-10 max-w-3xl space-y-3">
           {faqs.map((item, idx) => {
             const isOpen = openIndex === idx;
             return (
@@ -57,7 +56,7 @@ export default function FaqSection() {
                 <div className="overflow-hidden rounded-3xl border border-border bg-card/70 shadow-sm backdrop-blur">
                   <button
                     type="button"
-                    className="glass-hover flex w-full items-center justify-between gap-6 px-6 py-5 text-left sm:px-8 sm:py-6"
+                    className="glass-hover flex w-full items-center justify-between gap-4 px-6 py-3 text-left sm:px-8 sm:py-3"
                     onClick={() => setOpenIndex((v) => (v === idx ? null : idx))}
                   >
                     <div className="min-w-0 font-heading text-base font-extrabold text-navy sm:text-lg">
@@ -65,7 +64,7 @@ export default function FaqSection() {
                     </div>
                     <div
                       className={cn(
-                        "grid h-11 w-11 shrink-0 place-items-center rounded-2xl border border-border bg-white/70 text-brand shadow-sm backdrop-blur transition",
+                        "grid h-9 w-9 shrink-0 place-items-center rounded-2xl border border-border bg-white/70 text-brand shadow-sm backdrop-blur transition",
                         isOpen ? "bg-brand text-white" : "hover:bg-white",
                       )}
                     >
@@ -84,7 +83,7 @@ export default function FaqSection() {
                       isOpen ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0",
                     )}
                   >
-                    <div className="min-h-0 pb-6 text-sm leading-7 text-foreground/70 sm:text-base">
+                    <div className="min-h-0 pb-5 text-sm leading-7 text-foreground/70 sm:text-base">
                       {item.a}
                     </div>
                   </div>

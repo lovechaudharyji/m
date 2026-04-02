@@ -54,40 +54,42 @@ const tiles = [
 
 export default function GallerySection() {
   return (
-    <section id="gallery" className="mx-auto w-full max-w-6xl px-5 py-14 sm:py-20">
-      <Reveal className="flex flex-col items-center text-center">
-        <div className="font-heading text-sm font-extrabold tracking-widest text-white/70 uppercase">
-          Gallery
-        </div>
-        <h2 className="mt-3 font-heading text-3xl font-extrabold tracking-tight text-white sm:text-4xl">
-          Highlights to get excited about
-        </h2>
-        <p className="mt-3 max-w-2xl text-base leading-7 text-white/70 sm:text-lg">
-          A quick look at the vibe, the fun, and the moments you’ll remember.
-        </p>
-      </Reveal>
+    <section id="gallery" className="relative overflow-hidden bg-background py-14 sm:py-20">
+      <div className="mx-auto w-full max-w-6xl px-5">
+        <Reveal className="flex flex-col items-center text-center">
+          <div className="font-heading text-sm font-extrabold tracking-widest text-brand uppercase">
+            Gallery
+          </div>
+          <h2 className="mt-3 font-heading text-3xl font-extrabold tracking-tight text-navy sm:text-4xl">
+            Highlights to get excited about
+          </h2>
+          <p className="mt-3 max-w-2xl text-base leading-7 text-foreground/70 sm:text-lg">
+            A quick look at the vibe, the fun, and the moments you’ll remember.
+          </p>
+        </Reveal>
 
-      <div className="mt-10 grid grid-cols-12 gap-5 lg:auto-rows-[96px]">
-        {tiles.map((tile, idx) => (
-          <Reveal key={tile.tag} delayMs={70 * idx} className={tile.className}>
-            {tile.kind === "gradient" ? (
-              <div className="relative h-[280px] overflow-hidden rounded-3xl border border-border bg-[radial-gradient(900px_circle_at_10%_10%,rgba(14,165,233,0.18),transparent_55%),radial-gradient(900px_circle_at_90%_20%,rgba(2,132,199,0.14),transparent_55%),linear-gradient(180deg,rgba(255,255,255,0.70),rgba(255,255,255,0.55))] shadow-sm backdrop-blur lg:h-full">
-                <TileTag>{tile.tag}</TileTag>
-                <div className="absolute inset-0 bg-[radial-gradient(600px_circle_at_50%_20%,rgba(255,255,255,0.60),transparent_65%)]" />
-                <div className="relative flex h-full flex-col justify-end p-6">
-                  <div className="font-heading text-2xl font-extrabold tracking-tight text-navy sm:text-3xl">
-                    Handpicked weekend energy
-                  </div>
-                  <div className="mt-2 max-w-xs text-sm font-semibold text-foreground/70">
-                    From chill moments to adventure bursts—built for a perfect reset.
+        <div className="mt-10 grid grid-cols-12 gap-5 lg:auto-rows-[96px]">
+          {tiles.map((tile, idx) => (
+            <Reveal key={tile.tag} delayMs={70 * idx} className={tile.className}>
+              {tile.kind === "gradient" ? (
+                <div className="relative h-[280px] overflow-hidden rounded-3xl border border-border bg-[radial-gradient(900px_circle_at_10%_10%,rgba(14,165,233,0.18),transparent_55%),radial-gradient(900px_circle_at_90%_20%,rgba(2,132,199,0.14),transparent_55%),linear-gradient(180deg,rgba(255,255,255,0.70),rgba(255,255,255,0.55))] shadow-sm backdrop-blur lg:h-full">
+                  <TileTag>{tile.tag}</TileTag>
+                  <div className="absolute inset-0 bg-[radial-gradient(600px_circle_at_50%_20%,rgba(255,255,255,0.60),transparent_65%)]" />
+                  <div className="relative flex h-full flex-col justify-end p-6">
+                    <div className="font-heading text-2xl font-extrabold tracking-tight text-navy sm:text-3xl">
+                      Handpicked weekend energy
+                    </div>
+                    <div className="mt-2 max-w-xs text-sm font-semibold text-foreground/70">
+                      From chill moments to adventure bursts—built for a perfect reset.
+                    </div>
                   </div>
                 </div>
-              </div>
-            ) : (
-              <ImageTile tag={tile.tag} image={tile.image} />
-            )}
-          </Reveal>
-        ))}
+              ) : (
+                <ImageTile tag={tile.tag} image={tile.image} />
+              )}
+            </Reveal>
+          ))}
+        </div>
       </div>
     </section>
   );

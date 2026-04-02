@@ -1,0 +1,132 @@
+"use client";
+
+import { useEffect, useRef, useState } from "react";
+import type { ReactNode, RefObject } from "react";
+
+export function cn(...classes: Array<string | undefined | null | false>) {
+  return classes.filter(Boolean).join(" ");
+}
+
+export function Icon({ path, className }: { path: string; className?: string }) {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      aria-hidden="true"
+      className={className ?? ""}
+      width={20}
+      height={20}
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={2}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d={path} />
+    </svg>
+  );
+}
+
+export function MountReveal({
+  children,
+  delayMs = 0,
+  className,
+}: {
+  children: ReactNode;
+  delayMs?: number;
+  className?: string;
+}) {
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    const id = requestAnimationFrame(() => setMounted(true));
+    return () => cancelAnimationFrame(id);
+  }, []);
+
+  return (
+    <div
+      className={[
+        "transition duration-700 ease-out will-change-transform",
+        mounted ? "translate-y-0 opacity-100" : "translate-y-4 opacity-0",
+        className ?? "",
+      ].join(" ")}
+      style={{ transitionDelay: `${delayMs}ms` }}
+    >
+      {children}
+    </div>
+  );
+}
+
+export function Reveal({
+  children,
+  delayMs = 0,
+  className,
+}: {
+  children: ReactNode;
+  delayMs?: number;
+  className?: string;
+}) {
+  const elRef = useRef<HTMLDivElement | null>(null);
+  const [visible, setVisible] = useState(false);
+
+  useEffect(() => {
+    const el = elRef.current;
+    if (!el || visible) return;
+
+    const obs = new IntersectionObserver(
+      (entries) => {
+        const entry = entries[0];
+        if (!entry) return;
+        if (entry.isIntersecting) {
+          setVisible(true);
+          obs.disconnect();
+        }
+      },
+      { threshold: 0.15, rootMargin: "0px 0px -10% 0px" },
+    );
+
+    obs.observe(el);
+    return () => obs.disconnect();
+  }, [visible]);
+
+  return (
+    <div
+      ref={elRef}
+      className={[
+        "transition duration-700 ease-out will-change-transform",
+        visible ? "translate-y-0 opacity-100" : "translate-y-5 opacity-0",
+        className ?? "",
+      ].join(" ")}
+      style={{ transitionDelay: `${delayMs}ms` }}
+    >
+      {children}
+    </div>
+  );
+}
+
+export function useParallax(ref: RefObject<HTMLElement | null>, strength: number) {
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+
+    let rafId = 0;
+
+    const update = () => {
+      const y = window.scrollY * strength;
+      el.style.transform = `translate3d(0, ${y}px, 0)`;
+    };
+
+    const onScroll = () => {
+      cancelAnimationFrame(rafId);
+      rafId = requestAnimationFrame(update);
+    };
+
+    update();
+    window.addEventListener("scroll", onScroll, { passive: true });
+
+    return () => {
+      cancelAnimationFrame(rafId);
+      window.removeEventListener("scroll", onScroll);
+    };
+  }, [ref, strength]);
+}
+

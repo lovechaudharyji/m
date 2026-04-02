@@ -27,9 +27,9 @@ export default function Home() {
         <WhyChooseUsSection />
         <PricingSection />
         <BlueprintSection />
-        <GallerySection />
         <ShowcaseStripSection />
         <FaqSection />
+        <GallerySection />
         <BookingSection whatsappHref="https://wa.me/" />
         <FooterSection brandName="Weekend Escape" />
       </div>

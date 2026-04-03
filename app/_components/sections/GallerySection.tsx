@@ -6,37 +6,37 @@ const tiles = [
   {
     tag: "Learn Through Play",
     image: "/images/p1.webp",
-    className: "col-span-12 sm:col-span-6 lg:col-span-4 lg:row-span-2",
+    className: "col-span-1 sm:col-span-6 lg:col-span-4 lg:row-span-2",
   },
   {
     tag: "Indoor Play Party",
     image: "/images/p3.webp",
-    className: "col-span-12 sm:col-span-6 lg:col-span-4 lg:row-span-2 lg:row-start-3",
+    className: "col-span-1 sm:col-span-6 lg:col-span-4 lg:row-span-2 lg:row-start-3",
   },
   {
     tag: "Holiday Bestsellers",
     image: "/images/p8.jpg",
-    className: "col-span-12 lg:col-span-4 lg:row-span-4 lg:col-start-5 lg:row-start-1",
+    className: "col-span-1 sm:col-span-12 lg:col-span-4 lg:row-span-4 lg:col-start-5 lg:row-start-1",
   },
   {
     tag: "Trending",
     image: "/images/p4.webp",
-    className: "col-span-12 sm:col-span-6 lg:col-span-4 lg:row-span-2 lg:col-start-9 lg:row-start-1",
+    className: "col-span-1 sm:col-span-6 lg:col-span-4 lg:row-span-2 lg:col-start-9 lg:row-start-1",
   },
   {
     tag: "Brain Boosters",
     image: "/images/p5.webp",
-    className: "col-span-12 sm:col-span-6 lg:col-span-4 lg:row-span-2 lg:col-start-9 lg:row-start-3",
+    className: "col-span-1 sm:col-span-6 lg:col-span-4 lg:row-span-2 lg:col-start-9 lg:row-start-3",
   },
   {
     tag: "Outdoor Fun Zone",
     image: "/images/p6.webp",
-    className: "col-span-12 lg:col-span-8 lg:row-span-2 lg:col-start-1 lg:row-start-5",
+    className: "col-span-1 sm:col-span-12 lg:col-span-8 lg:row-span-2 lg:col-start-1 lg:row-start-5",
   },
   {
     tag: "Festive Family Games",
     image: "/images/p7.webp",
-    className: "col-span-12 lg:col-span-4 lg:row-span-2 lg:col-start-9 lg:row-start-5",
+    className: "hidden sm:block sm:col-span-12 lg:col-span-4 lg:row-span-2 lg:col-start-9 lg:row-start-5",
   },
 ] as const;
 
@@ -56,7 +56,7 @@ export default function GallerySection() {
           </p>
         </Reveal>
 
-        <div className="mt-10 grid grid-cols-12 gap-5 lg:auto-rows-[96px]">
+        <div className="mt-10 grid grid-cols-2 gap-5 sm:grid-cols-12 lg:auto-rows-[96px]">
           {tiles.map((tile, idx) => (
             <Reveal key={tile.tag} delayMs={70 * idx} className={tile.className}>
               <ImageTile tag={tile.tag} image={tile.image} />

@@ -69,18 +69,42 @@ export default function Header({ brandName }: HeaderProps) {
               </svg>
             )}
           </button>
-          <a
-            href="#pricing"
-            className="we-button hidden rounded-full border border-border bg-white/50 px-4 py-2 text-sm font-semibold text-foreground shadow-sm transition hover:bg-white md:inline-flex"
-          >
-            View Plans
-          </a>
-          <a
-            href="#booking"
+          <div className="group relative hidden md:inline-flex">
+            <a
+              href="#booking"
+              className="we-button inline-flex items-center gap-2 rounded-full border border-border bg-white/50 px-4 py-2 text-sm font-semibold text-foreground shadow-sm transition hover:bg-white"
+            >
+              <Icon
+                className="text-foreground"
+                path="M22 16.92v3a2 2 0 01-2.18 2 19.86 19.86 0 01-8.63-3.07 19.5 19.5 0 01-6-6A19.86 19.86 0 012.08 4.18 2 2 0 014.06 2h3a2 2 0 012 1.72c.12.86.31 1.7.57 2.5a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.58-1.58a2 2 0 012.11-.45c.8.26 1.64.45 2.5.57A2 2 0 0122 16.92z"
+              />
+              <span>Talk to Expert</span>
+            </a>
+            <div className="pointer-events-none absolute right-0 top-full mt-2 w-72 translate-y-1 opacity-0 transition duration-200 group-hover:pointer-events-auto group-hover:translate-y-0 group-hover:opacity-100 group-focus-within:pointer-events-auto group-focus-within:translate-y-0 group-focus-within:opacity-100">
+              <div className="overflow-hidden rounded-2xl border border-border bg-white/95 shadow-[0_18px_60px_rgba(15,23,42,0.18)] backdrop-blur">
+                <div className="grid gap-2 p-3 text-sm font-semibold text-foreground/80">
+                  <div className="flex items-center gap-2">
+                    <Icon className="text-brand" path="M21 15a4 4 0 01-4 4H7l-4 4V7a4 4 0 014-4h10a4 4 0 014 4z" />
+                    <span>9643906583</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <Icon
+                      className="text-brand"
+                      path="M22 16.92v3a2 2 0 01-2.18 2 19.86 19.86 0 01-8.63-3.07 19.5 19.5 0 01-6-6A19.86 19.86 0 012.08 4.18 2 2 0 014.06 2h3a2 2 0 012 1.72c.12.86.31 1.7.57 2.5a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.58-1.58a2 2 0 012.11-.45c.8.26 1.64.45 2.5.57A2 2 0 0122 16.92z"
+                    />
+                    <span>96433906583</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <button
+            type="button"
             className="we-button hidden items-center justify-center rounded-full bg-brand px-4 py-2 text-sm font-semibold text-white shadow-[0_4px_14px_rgba(0,0,0,0.10)] transition duration-300 hover:bg-brand-hover md:inline-flex"
+            onClick={() => window.dispatchEvent(new CustomEvent("we:open-booking-form", { detail: { package: "adventure" } }))}
           >
             Book Your Weekend
-          </a>
+          </button>
         </div>
       </div>
 
@@ -99,46 +123,70 @@ export default function Header({ brandName }: HeaderProps) {
         <div className="mx-auto w-full max-w-6xl px-5">
           <div className="mt-2 overflow-hidden rounded-3xl border border-border bg-white/90 shadow-[0_30px_80px_rgba(15,23,42,0.14)] backdrop-blur transition">
             <div className="grid gap-1 p-3 text-sm font-semibold text-foreground/80">
-              <a href="#" className="we-button rounded-2xl px-4 py-3 hover:bg-white" onClick={() => setOpen(false)}>
-                Home
+              <a
+                href="#"
+                className="we-button flex items-center gap-3 rounded-2xl px-4 py-3 hover:bg-white"
+                onClick={() => setOpen(false)}
+              >
+                <Icon className="text-foreground/70" path="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2V9z M9 22V12h6v10" />
+                <span>Home</span>
               </a>
               <a
                 href="#pricing"
-                className="we-button rounded-2xl px-4 py-3 hover:bg-white"
+                className="we-button flex items-center gap-3 rounded-2xl px-4 py-3 hover:bg-white"
                 onClick={() => setOpen(false)}
               >
-                Our Plan
+                <Icon
+                  className="text-foreground/70"
+                  path="M9 2h6M9 4h6M9 2v2M15 2v2M7 4h10a2 2 0 012 2v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6a2 2 0 012-2z M8 10h8 M8 14h8 M8 18h6"
+                />
+                <span>Our Plan</span>
               </a>
               <a
                 href="#itinerary"
-                className="we-button rounded-2xl px-4 py-3 hover:bg-white"
+                className="we-button flex items-center gap-3 rounded-2xl px-4 py-3 hover:bg-white"
                 onClick={() => setOpen(false)}
               >
-                Itinerary
+                <Icon
+                  className="text-foreground/70"
+                  path="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 1118 0z M12 10a3 3 0 110-6 3 3 0 010 6z"
+                />
+                <span>Itinerary</span>
               </a>
               <a
                 href="#experience"
-                className="we-button rounded-2xl px-4 py-3 hover:bg-white"
+                className="we-button flex items-center gap-3 rounded-2xl px-4 py-3 hover:bg-white"
                 onClick={() => setOpen(false)}
               >
-                About
+                <Icon
+                  className="text-foreground/70"
+                  path="M12 22a10 10 0 110-20 10 10 0 010 20z M12 16v-4 M12 8h.01"
+                />
+                <span>About</span>
               </a>
               <a
                 href="#contact"
-                className="we-button rounded-2xl px-4 py-3 hover:bg-white"
+                className="we-button flex items-center gap-3 rounded-2xl px-4 py-3 hover:bg-white"
                 onClick={() => setOpen(false)}
               >
-                Contact Us
+                <Icon className="text-foreground/70" path="M21 15a4 4 0 01-4 4H7l-4 4V7a4 4 0 014-4h10a4 4 0 014 4z" />
+                <span>Contact Us</span>
               </a>
             </div>
 
             <div className="flex items-center gap-3 border-t border-border p-3">
               <a
-                href="#pricing"
+                href="#booking"
                 className="we-button inline-flex h-11 flex-1 items-center justify-center rounded-2xl border border-border bg-white px-4 text-sm font-semibold text-foreground shadow-sm transition hover:bg-white/80"
                 onClick={() => setOpen(false)}
               >
-                View Plans
+                <span className="inline-flex items-center justify-center gap-2">
+                  <Icon
+                    className="text-foreground"
+                    path="M22 16.92v3a2 2 0 01-2.18 2 19.86 19.86 0 01-8.63-3.07 19.5 19.5 0 01-6-6A19.86 19.86 0 012.08 4.18 2 2 0 014.06 2h3a2 2 0 012 1.72c.12.86.31 1.7.57 2.5a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.58-1.58a2 2 0 012.11-.45c.8.26 1.64.45 2.5.57A2 2 0 0122 16.92z"
+                  />
+                  <span>Talk to Expert</span>
+                </span>
               </a>
             </div>
           </div>
@@ -148,14 +196,17 @@ export default function Header({ brandName }: HeaderProps) {
       <div className="fixed inset-x-0 bottom-0 z-50 md:hidden">
         <div className="mx-auto w-full max-w-6xl px-5 pb-[max(0.75rem,env(safe-area-inset-bottom))]">
           <div className="grid grid-cols-2 overflow-hidden rounded-2xl border border-border bg-white/90 shadow-[0_18px_60px_rgba(15,23,42,0.18)] backdrop-blur">
-            <a
-              href="#booking"
-              onClick={() => setOpen(false)}
+            <button
+              type="button"
+              onClick={() => {
+                setOpen(false);
+                window.dispatchEvent(new CustomEvent("we:open-booking-form", { detail: { package: "adventure" } }));
+              }}
               className="we-button inline-flex h-12 items-center justify-center gap-2 bg-brand px-4 text-sm font-semibold text-white"
             >
               <Icon className="text-white" path="M21 15a4 4 0 01-4 4H7l-4 4V7a4 4 0 014-4h10a4 4 0 014 4z" />
               <span>Get a Callback</span>
-            </a>
+            </button>
             <a
               href="tel:+919643906583"
               onClick={() => setOpen(false)}
@@ -165,7 +216,7 @@ export default function Header({ brandName }: HeaderProps) {
                 className="text-foreground"
                 path="M22 16.92v3a2 2 0 01-2.18 2 19.86 19.86 0 01-8.63-3.07 19.5 19.5 0 01-6-6A19.86 19.86 0 012.08 4.18 2 2 0 014.06 2h3a2 2 0 012 1.72c.12.86.31 1.7.57 2.5a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.58-1.58a2 2 0 012.11-.45c.8.26 1.64.45 2.5.57A2 2 0 0122 16.92z"
               />
-              <span>Call Now</span>
+              <span>Call to Expert</span>
             </a>
           </div>
         </div>

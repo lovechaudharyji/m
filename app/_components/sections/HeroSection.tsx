@@ -26,13 +26,14 @@ export default function HeroSection() {
           <div className="absolute inset-0 scale-110">
             <video
               className="absolute inset-0 h-full w-full object-cover"
-              src="/images/hm.mp4"
               autoPlay
               muted
               loop
               playsInline
-              preload="auto"
-            />
+              preload="metadata"
+            >
+              <source src="/images/hm.mp4" type="video/mp4" />
+            </video>
           </div>
         </div>
       </div>
@@ -80,9 +81,10 @@ export default function HeroSection() {
           </a>
           <a
             href="#pricing"
-            className="we-button inline-flex h-14 items-center justify-center rounded-full border border-border bg-white/60 px-8 text-sm font-semibold text-foreground shadow-sm backdrop-blur transition hover:bg-white"
+            className="we-button inline-flex h-14 items-center justify-center gap-2 rounded-full border border-border bg-white/60 px-8 text-sm font-semibold text-foreground shadow-sm backdrop-blur transition hover:bg-white"
           >
-            View Plans
+            <Icon className="text-foreground" path="M12 20l9-5-9-5-9 5 9 5z M12 12l9-5-9-5-9 5 9 5z" />
+            <span>View Plans</span>
           </a>
         </MountReveal>
 

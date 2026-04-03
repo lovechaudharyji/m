@@ -36,14 +36,14 @@ export default function WhyChooseUsSection() {
           <p className="mt-4 text-lg text-foreground/70">Built for busy professionals.</p>
         </Reveal>
 
-        <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="mt-12 grid grid-cols-2 gap-4 sm:gap-6 lg:grid-cols-4">
           {reasons.map((r, i) => (
             <Reveal
               key={r.title}
               delayMs={100 * i}
-              className="rounded-2xl border border-border bg-card p-6 text-center shadow-sm transition hover:-translate-y-0.5 hover:shadow-md"
+              className="rounded-2xl border border-border bg-card p-4 text-center shadow-sm transition hover:-translate-y-0.5 hover:shadow-md sm:p-6"
             >
-              <div className="mx-auto mb-4 grid h-14 w-14 place-items-center rounded-2xl bg-brand/20">
+              <div className="mx-auto mb-3 grid h-12 w-12 place-items-center rounded-2xl bg-brand/20 sm:mb-4 sm:h-14 sm:w-14">
                 {r.icon === "calendarCheck" ? (
                   <Icon className="text-brand" path="M8 2v4M16 2v4M3 6h18v16H3V6zM7 13l2 2 4-4" />
                 ) : r.icon === "shield" ? (
@@ -60,8 +60,8 @@ export default function WhyChooseUsSection() {
                   />
                 )}
               </div>
-              <h3 className="font-heading text-lg font-extrabold text-foreground">{r.title}</h3>
-              <p className="mt-2 text-sm leading-relaxed text-foreground/70">{r.desc}</p>
+              <h3 className="font-heading text-sm font-extrabold text-foreground sm:text-lg">{r.title}</h3>
+              <p className="mt-2 text-xs leading-relaxed text-foreground/70 sm:text-sm">{r.desc}</p>
             </Reveal>
           ))}
         </div>

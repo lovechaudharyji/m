@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Image from "next/image";
 import { Icon } from "@/app/_components/shared";
 
 type HeaderProps = {
@@ -22,17 +23,19 @@ export default function Header({ brandName }: HeaderProps) {
   return (
     <header className="fixed inset-x-0 top-0 z-50 bg-transparent">
       <div className="mx-auto flex w-full max-w-6xl items-center justify-between px-5 py-4 backdrop-blur">
-        <a href="#" className="flex items-center gap-2">
-          <span className="grid h-9 w-9 place-items-center rounded-xl border border-border bg-white text-navy shadow-sm">
-            WE
+        <a href="#" className="flex items-center gap-3">
+          <span className="grid h-16 w-16 place-items-center overflow-hidden rounded-2xl border border-border bg-transparent shadow-sm">
+            <Image src="/images/mountaura.png" alt={brandName} width={64} height={64} className="h-full w-full object-contain" priority />
           </span>
           <div className="leading-tight">
-            <div className="font-heading text-sm font-bold tracking-wide text-navy">{brandName}</div>
-            <div className="text-xs text-foreground/70">Leave Friday. Return Sunday.</div>
+            <div className="font-heading text-lg font-extrabold tracking-wide text-navy sm:text-xl">
+              {brandName}
+            </div>
+            <div className="text-xs text-foreground/70">Feel the Aura of mountain</div>
           </div>
         </a>
 
-        <nav className="hidden items-center gap-6 text-sm text-foreground/80 md:flex">
+        <nav className="hidden items-center gap-6 text-base font-semibold text-foreground/80 md:flex">
           <a href="#" className="hover:text-foreground">
             Home
           </a>
@@ -122,7 +125,7 @@ export default function Header({ brandName }: HeaderProps) {
         />
         <div className="mx-auto w-full max-w-6xl px-5">
           <div className="mt-2 overflow-hidden rounded-3xl border border-border bg-white/90 shadow-[0_30px_80px_rgba(15,23,42,0.14)] backdrop-blur transition">
-            <div className="grid gap-1 p-3 text-sm font-semibold text-foreground/80">
+            <div className="grid gap-1 p-3 text-base font-semibold text-foreground/80">
               <a
                 href="#"
                 className="we-button flex items-center gap-3 rounded-2xl px-4 py-3 hover:bg-white"

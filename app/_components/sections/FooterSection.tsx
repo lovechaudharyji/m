@@ -1,6 +1,7 @@
 "use client";
 
 import { Icon, Reveal } from "@/app/_components/shared";
+import Image from "next/image";
 import type { ReactNode } from "react";
 
 type FooterSectionProps = {
@@ -49,7 +50,10 @@ export default function FooterSection({ brandName, socialLinks }: FooterSectionP
       <div className="mx-auto w-full max-w-6xl px-5 py-12">
         <Reveal className="grid gap-10 md:grid-cols-4 md:items-start">
           <div className="md:col-span-2">
-            <div className="font-heading text-xl font-extrabold tracking-tight text-navy">{brandName}</div>
+            <div className="flex items-center gap-3">
+              <Image src="/images/mountaura.png" alt={brandName} width={44} height={44} className="h-11 w-11 object-contain" />
+              <div className="font-heading text-xl font-extrabold tracking-tight text-navy">{brandName}</div>
+            </div>
             <p className="mt-3 max-w-sm text-sm leading-6 text-foreground/70">
               Built for busy professionals who want a real weekend without taking leaves.
             </p>

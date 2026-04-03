@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { cn, Icon, Reveal } from "@/app/_components/shared";
 
 type Plan = {
@@ -56,6 +56,8 @@ const plans: Plan[] = [
 
 export default function PricingSection() {
   const [open, setOpen] = useState(false);
+  const lastFocusRef = useRef<HTMLElement | null>(null);
+  const firstFieldRef = useRef<HTMLInputElement | null>(null);
   const [unlockedPackages, setUnlockedPackages] = useState({
     adventure: false,
     resort: false,
@@ -67,19 +69,37 @@ export default function PricingSection() {
     package: "adventure" as "adventure" | "resort",
   });
 
+  const closeModal = () => {
+    setOpen(false);
+    const el = lastFocusRef.current;
+    window.setTimeout(() => el?.focus?.(), 0);
+  };
+
   useEffect(() => {
     if (!open) return;
     const onKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "Escape") setOpen(false);
+      if (e.key === "Escape") {
+        e.preventDefault();
+        closeModal();
+      }
     };
     window.addEventListener("keydown", onKeyDown);
     return () => window.removeEventListener("keydown", onKeyDown);
   }, [open]);
 
   useEffect(() => {
+    if (!open) return;
+    const id = window.setTimeout(() => {
+      firstFieldRef.current?.focus();
+    }, 0);
+    return () => window.clearTimeout(id);
+  }, [open]);
+
+  useEffect(() => {
     const onOpenBookingForm = (event: Event) => {
       const detail = (event as CustomEvent).detail as { package?: unknown } | undefined;
       const pkg = detail?.package === "resort" ? "resort" : "adventure";
+      lastFocusRef.current = document.activeElement instanceof HTMLElement ? document.activeElement : null;
       setForm((s) => ({ ...s, package: pkg }));
       setOpen(true);
     };
@@ -90,7 +110,7 @@ export default function PricingSection() {
 
   const quickWhatsAppHref = useMemo(() => {
     const message = [
-      "Hi! I want to book a weekend escape.",
+      "Hi! I want to book MountAura.",
       "",
       `Name: ${form.fullName.trim() || "-"}`,
       `Contact: ${form.contact.trim() || "-"}`,
@@ -102,6 +122,7 @@ export default function PricingSection() {
   }, [form]);
 
   const openForPlan = (pkg: "adventure" | "resort") => {
+    lastFocusRef.current = document.activeElement instanceof HTMLElement ? document.activeElement : null;
     setForm((s) => ({ ...s, package: pkg }));
     setOpen(true);
   };
@@ -110,7 +131,7 @@ export default function PricingSection() {
     e.preventDefault();
     window.open(quickWhatsAppHref, "_blank", "noreferrer");
     setUnlockedPackages({ adventure: true, resort: true });
-    setOpen(false);
+    closeModal();
   };
 
   return (
@@ -194,13 +215,19 @@ export default function PricingSection() {
                     className="we-button inline-flex h-12 w-full items-center justify-center rounded-full bg-brand px-7 text-sm font-semibold text-white shadow-[0_20px_70px_rgba(0,0,0,0.35)] transition duration-300 hover:bg-brand-hover"
                     onClick={() => openForPlan(pkg)}
                   >
-                    See Price
+                    <span className="inline-flex items-center justify-center gap-2">
+                      <Icon className="text-white" path="M12 12c2.21 0 4-1.79 4-4S14.21 4 12 4 8 5.79 8 8s1.79 4 4 4z M4 20v-1a6 6 0 0112 0v1H4z M16 20v-1c0-1.2-.35-2.31-.95-3.25A6 6 0 0120 19v1h-4z" />
+                      <span>See Price</span>
+                    </span>
                   </button>
                   <a
                     href={plan.icon === "hotel" ? "/comfort" : "#itinerary"}
                     className="we-button inline-flex h-12 w-full items-center justify-center rounded-full border border-border bg-white px-7 text-sm font-semibold text-foreground shadow-sm transition hover:bg-white/80"
                   >
-                    Read More
+                    <span className="inline-flex items-center justify-center gap-2">
+                      <Icon className="text-foreground" path="M14 3h7v7 M10 14L21 3 M5 7h4 M5 12h6 M5 17h10" />
+                      <span>Read More</span>
+                    </span>
                   </a>
                 </div>
               </Reveal>
@@ -208,52 +235,50 @@ export default function PricingSection() {
           })}
         </div>
 
-        <Reveal delayMs={200} className="mt-8 flex items-center justify-center gap-2 text-center text-sm font-semibold text-white/80">
-          <Icon className="text-white/80" path="M21 15a4 4 0 01-4 4H7l-4 4V7a4 4 0 014-4h10a4 4 0 014 4z" />
+        <Reveal delayMs={200} className="mt-8 flex items-center justify-center gap-2 text-center text-sm font-semibold text-black">
+          <Icon className="text-black" path="M21 15a4 4 0 01-4 4H7l-4 4V7a4 4 0 014-4h10a4 4 0 014 4z" />
           <span>Limited seats only — weekends fill fast · Instant confirmation · No hidden costs</span>
         </Reveal>
       </div>
 
-      <div
-        className={cn(
-          "fixed inset-0 z-50",
-          open ? "pointer-events-auto opacity-100" : "pointer-events-none opacity-0",
-        )}
-        aria-hidden={!open}
-      >
-        <div className="absolute inset-0 bg-black/40" onClick={() => setOpen(false)} aria-hidden="true" />
-        <div className="absolute inset-0 grid place-items-center px-5 py-8">
-          <div
-            role="dialog"
-            aria-modal="true"
-            className="w-full max-w-lg overflow-hidden rounded-3xl border border-border bg-white shadow-[0_30px_90px_rgba(15,23,42,0.28)]"
-          >
-            <div className="flex items-center justify-between border-b border-border px-6 py-5">
-              <div>
-                <div className="font-heading text-lg font-extrabold text-navy">Talk to Expert</div>
-                <div className="mt-0.5 text-sm font-semibold text-foreground/60">Fill your details and select a package.</div>
+      {open ? (
+        <div className="fixed inset-0 z-50">
+          <div className="absolute inset-0 bg-black/40" onClick={closeModal} aria-hidden="true" />
+          <div className="absolute inset-0 grid place-items-center px-5 py-8">
+            <div
+              role="dialog"
+              aria-modal="true"
+              className="w-full max-w-lg overflow-hidden rounded-3xl border border-border bg-white shadow-[0_30px_90px_rgba(15,23,42,0.28)]"
+            >
+              <div className="flex items-center justify-between border-b border-border px-6 py-5">
+                <div>
+                  <div className="font-heading text-lg font-extrabold text-navy">Talk to Expert</div>
+                  <div className="mt-0.5 text-sm font-semibold text-foreground/60">
+                    Fill your details and select a package.
+                  </div>
+                </div>
+                <button
+                  type="button"
+                  onClick={closeModal}
+                  className="we-button grid h-10 w-10 place-items-center rounded-2xl border border-border bg-white text-foreground shadow-sm transition hover:bg-white/80"
+                  aria-label="Close"
+                >
+                  <Icon className="text-foreground" path="M6 6l12 12M18 6l-12 12" />
+                </button>
               </div>
-              <button
-                type="button"
-                onClick={() => setOpen(false)}
-                className="we-button grid h-10 w-10 place-items-center rounded-2xl border border-border bg-white text-foreground shadow-sm transition hover:bg-white/80"
-                aria-label="Close"
-              >
-                <Icon className="text-foreground" path="M6 6l12 12M18 6l-12 12" />
-              </button>
-            </div>
 
-            <form onSubmit={onSubmit} className="grid gap-5 p-6">
-              <label className="grid gap-1.5">
-                <span className="text-sm font-semibold text-foreground/80">Full Name</span>
-                <input
-                  value={form.fullName}
-                  onChange={(e) => setForm((s) => ({ ...s, fullName: e.target.value }))}
-                  required
-                  className="h-11 rounded-2xl border border-border bg-white px-4 text-sm text-foreground outline-none placeholder:text-foreground/40 focus:border-brand/60"
-                  placeholder="Your full name"
-                />
-              </label>
+              <form onSubmit={onSubmit} className="grid gap-5 p-6">
+                <label className="grid gap-1.5">
+                  <span className="text-sm font-semibold text-foreground/80">Full Name</span>
+                  <input
+                    ref={firstFieldRef}
+                    value={form.fullName}
+                    onChange={(e) => setForm((s) => ({ ...s, fullName: e.target.value }))}
+                    required
+                    className="h-11 rounded-2xl border border-border bg-white px-4 text-sm text-foreground outline-none placeholder:text-foreground/40 focus:border-brand/60"
+                    placeholder="Your full name"
+                  />
+                </label>
 
               <label className="grid gap-1.5">
                 <span className="text-sm font-semibold text-foreground/80">Contact</span>
@@ -328,10 +353,11 @@ export default function PricingSection() {
               >
                 Submit
               </button>
-            </form>
+              </form>
+            </div>
           </div>
         </div>
-      </div>
+      ) : null}
     </section>
   );
 }

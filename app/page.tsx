@@ -19,7 +19,7 @@ export default function Home() {
       </div>
 
       <div className="relative z-10 flex flex-1 flex-col">
-        <Header brandName="Weekend Escape" />
+        <Header brandName="MountAura" />
         <HeroSection />
         <ProblemSection />
          <PricingSection />
@@ -32,7 +32,7 @@ export default function Home() {
         <FaqSection />
        
         <BookingSection whatsappHref="https://wa.me/" />
-        <FooterSection brandName="Weekend Escape" />
+        <FooterSection brandName="MountAura" />
       </div>
     </div>
   );

@@ -34,7 +34,10 @@ export default function FaqSection() {
   const [openIndex, setOpenIndex] = useState<number | null>(0);
 
   return (
-    <section id="faq" className="relative bg-white py-14 sm:py-20">
+    <section
+      id="faq"
+      className="relative bg-[linear-gradient(180deg,#ffffff_0%,#e0f2fe_55%,#0ea5e9_100%)] py-14 sm:py-20"
+    >
       <div className="mx-auto w-full max-w-6xl px-5">
         <Reveal className="mx-auto max-w-3xl text-center">
           <div className="font-heading text-sm font-extrabold tracking-widest text-brand uppercase">

@@ -1,11 +1,11 @@
 import type { Metadata } from "next";
-import { Luxurious_Script, Montserrat } from "next/font/google";
+import { Montserrat, Roboto_Slab } from "next/font/google";
 import "./globals.css";
 
-const luxuriousScript = Luxurious_Script({
-  variable: "--font-luxurious",
+const robotoSlab = Roboto_Slab({
+  variable: "--font-roboto-slab",
   subsets: ["latin"],
-  weight: "400",
+  weight: ["400", "500", "600", "700", "800", "900"],
 });
 
 const montserrat = Montserrat({
@@ -27,7 +27,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${montserrat.variable} ${luxuriousScript.variable} h-full antialiased`}
+      className={`${montserrat.variable} ${robotoSlab.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">{children}</body>
     </html>

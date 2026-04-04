@@ -39,7 +39,7 @@ export default function Header({ brandName }: HeaderProps) {
     <header className="fixed inset-x-0 top-0 z-50 bg-transparent">
       <div className="mx-auto flex w-full max-w-6xl items-center justify-between px-5 py-4 backdrop-blur">
         <Link href="/" className="flex items-center gap-3">
-          <span className="grid h-16 w-16 place-items-center overflow-hidden rounded-2xl border border-border bg-transparent shadow-sm">
+          <span className="grid h-16 w-16 place-items-center overflow-hidden rounded-2xl bg-transparent">
             <Image src="/images/mountaura.png" alt={brandName} width={64} height={64} className="h-full w-full object-contain" priority />
           </span>
           <div className="leading-tight">

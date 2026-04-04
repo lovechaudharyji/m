@@ -13,6 +13,8 @@
   --success: #0ea5e9;
   --success-soft: #e0f2fe;
   --success-strong: #0284c7;
+  --font-montserrat: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  --font-roboto-slab: ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
 }
 
 @theme inline {

@@ -4,11 +4,7 @@ import { useState, type FormEvent } from "react";
 import Image from "next/image";
 import { cn, Icon, Reveal } from "@/app/_components/shared";
 
-type BookingSectionProps = {
-  whatsappHref: string;
-};
-
-export default function BookingSection({ whatsappHref }: BookingSectionProps) {
+export default function BookingSection() {
   const [form, setForm] = useState({
     name: "",
     phone: "",
@@ -16,35 +12,43 @@ export default function BookingSection({ whatsappHref }: BookingSectionProps) {
     plan: "adventure" as "adventure" | "resort",
   });
 
-  const [submitState, setSubmitState] = useState<"idle" | "success">("idle");
+  const [submitState, setSubmitState] = useState<"idle" | "submitting" | "success" | "error">("idle");
+  const [submitError, setSubmitError] = useState<string>("");
 
-  const buildWhatsAppUrl = (message: string) => {
-    const base = whatsappHref.trim() || "https://wa.me/";
-    const hasQuery = base.includes("?");
-    const hasTextParam = /[?&]text=/.test(base);
-
-    if (hasTextParam) {
-      return base.replace(/([?&]text=)[^&]*/i, `$1${message}`);
-    }
-
-    return `${base}${hasQuery ? "&" : "?"}text=${message}`;
-  };
-
-  const onSubmit = (e: FormEvent) => {
+  const onSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    const msg = encodeURIComponent(
-      `Hi! Reserve my spot.\n\nName: ${form.name || "-"}\nPhone: ${form.phone || "-"}\nEmail: ${form.email || "-"}\nPlan: ${
-        form.plan === "adventure" ? "Adventure" : "Resort"
-      }\n\nI want instant confirmation if seats are available.`,
-    );
-    setSubmitState("success");
-    window.setTimeout(() => setSubmitState("idle"), 5000);
-    window.open(buildWhatsAppUrl(msg), "_blank", "noopener,noreferrer");
-  };
+    if (submitState === "submitting") return;
+    setSubmitState("submitting");
+    setSubmitError("");
 
-  const quickWhatsAppHref = buildWhatsAppUrl(
-    encodeURIComponent("Hi! I want to book MountAura. Please share available dates and seats."),
-  );
+    try {
+      const res = await fetch("/api/leads", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          fullName: form.name,
+          contact: form.phone,
+          email: form.email,
+          package: form.plan,
+        }),
+      });
+
+      if (!res.ok) {
+        const data = (await res.json().catch(() => null)) as
+          | { error?: string; details?: string; status?: number }
+          | null;
+        const message = data?.error?.trim() || "Could not save details. Please try again.";
+        const details = data?.details?.trim();
+        throw new Error(details ? `${message} (${details})` : message);
+      }
+
+      setSubmitState("success");
+      window.setTimeout(() => setSubmitState("idle"), 5000);
+    } catch (err) {
+      setSubmitError(err instanceof Error ? err.message : "Could not save details. Please try again.");
+      setSubmitState("error");
+    }
+  };
 
   return (
     <section
@@ -87,10 +91,16 @@ export default function BookingSection({ whatsappHref }: BookingSectionProps) {
                 <div className="rounded-2xl border border-success/30 bg-success-soft px-4 py-3 text-sm font-semibold text-foreground">
                   <div className="flex items-center gap-2">
                     <Icon className="text-success-strong" path="M20 6L9 17l-5-5" />
-                    <span>Spot Reserved! We&apos;ll contact you shortly.</span>
+                    <span>Submitted! We&apos;ll contact you shortly.</span>
                   </div>
-                  <div className="mt-1 text-xs font-semibold text-foreground/70">
-                    Check WhatsApp for instant confirmation.
+                </div>
+              ) : null}
+
+              {submitState === "error" ? (
+                <div className="rounded-2xl border border-[#ef4444]/30 bg-[#fef2f2] px-4 py-3 text-sm font-semibold text-foreground">
+                  <div className="flex items-center gap-2">
+                    <Icon className="text-[#ef4444]" path="M12 9v4m0 4h.01M10.29 3.86l-7.4 12.82A2 2 0 004.62 20h14.76a2 2 0 001.73-3.32l-7.4-12.82a2 2 0 00-3.42 0z" />
+                    <span>{submitError || "Could not save details. Please try again."}</span>
                   </div>
                 </div>
               ) : null}
@@ -168,29 +178,14 @@ export default function BookingSection({ whatsappHref }: BookingSectionProps) {
 
               <button
                 type="submit"
+                disabled={submitState === "submitting"}
                 className="we-button inline-flex h-12 w-full items-center justify-center rounded-full bg-accent px-7 text-sm font-semibold text-white shadow-[0_4px_14px_rgba(0,0,0,0.10)] transition duration-300 hover:opacity-95"
               >
                 <span className="inline-flex items-center justify-center gap-2">
                   <Icon className="text-white" path="M22 2L11 13 M22 2l-7 20-4-9-9-4 20-7z" />
-                  <span>Submit</span>
+                  <span>{submitState === "submitting" ? "Saving..." : "Submit"}</span>
                 </span>
               </button>
-
-              <a
-                href={quickWhatsAppHref}
-                target="_blank"
-                rel="noreferrer"
-                className="we-button inline-flex h-12 w-full items-center justify-center rounded-full border border-border bg-white px-7 text-sm font-semibold text-foreground shadow-sm transition hover:bg-white/80"
-              >
-                <span className="inline-flex items-center justify-center gap-2">
-                  <Icon className="text-success-strong" path="M21.05 11.2A9.85 9.85 0 0011.2 1.35a9.85 9.85 0 00-8.4 15l-1.1 4 4.1-1.08A9.86 9.86 0 0011.2 21.05 9.85 9.85 0 0021.05 11.2z M11.2 19.2c-1.63 0-3.2-.42-4.6-1.2l-.33-.2-2.43.64.65-2.37-.22-.35a8.02 8.02 0 01-1.28-4.33 8.04 8.04 0 018.01-8.01 8.05 8.05 0 018.01 8.02 8.04 8.04 0 01-8.01 8.01z M15.86 13.24c-.26-.13-1.54-.76-1.78-.84-.24-.09-.41-.13-.58.13-.17.26-.67.84-.82 1.01-.15.17-.3.2-.56.07-.26-.13-1.1-.4-2.09-1.28-.77-.68-1.3-1.52-1.45-1.78-.15-.26-.02-.4.11-.53.12-.12.26-.3.39-.45.13-.15.17-.26.26-.43.09-.17.04-.32-.02-.45-.06-.13-.58-1.4-.8-1.92-.2-.48-.41-.41-.58-.42h-.49c-.17 0-.45.06-.69.32-.24.26-.9.88-.9 2.14 0 1.26.93 2.47 1.06 2.64.13.17 1.83 2.79 4.44 3.91.62.27 1.1.43 1.48.55.62.2 1.18.17 1.63.1.5-.08 1.54-.63 1.76-1.24.22-.6.22-1.11.15-1.22-.07-.11-.24-.17-.5-.3z" />
-                  <span>WhatsApp Now</span>
-                </span>
-              </a>
-
-              <div className="text-center text-xs font-semibold text-foreground/60">
-                By submitting, you&apos;ll be redirected to WhatsApp with your details pre-filled.
-              </div>
             </form>
           </div>
         </Reveal>

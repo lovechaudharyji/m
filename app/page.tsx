@@ -31,7 +31,7 @@ export default function Home() {
          <GallerySection />
         <FaqSection />
        
-        <BookingSection whatsappHref="https://wa.me/" />
+        <BookingSection />
         <FooterSection brandName="MountAura" />
       </div>
     </div>

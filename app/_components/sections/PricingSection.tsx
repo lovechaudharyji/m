@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { cn, Icon, Reveal } from "@/app/_components/shared";
 
 type Plan = {
@@ -68,9 +68,13 @@ export default function PricingSection() {
     email: "",
     package: "adventure" as "adventure" | "resort",
   });
+  const [submitState, setSubmitState] = useState<"idle" | "submitting" | "success" | "error">("idle");
+  const [submitError, setSubmitError] = useState<string>("");
 
   const closeModal = () => {
     setOpen(false);
+    setSubmitState("idle");
+    setSubmitError("");
     const el = lastFocusRef.current;
     window.setTimeout(() => el?.focus?.(), 0);
   };
@@ -101,6 +105,8 @@ export default function PricingSection() {
       const pkg = detail?.package === "resort" ? "resort" : "adventure";
       lastFocusRef.current = document.activeElement instanceof HTMLElement ? document.activeElement : null;
       setForm((s) => ({ ...s, package: pkg }));
+      setSubmitState("idle");
+      setSubmitError("");
       setOpen(true);
     };
 
@@ -108,30 +114,51 @@ export default function PricingSection() {
     return () => window.removeEventListener("we:open-booking-form", onOpenBookingForm as EventListener);
   }, []);
 
-  const quickWhatsAppHref = useMemo(() => {
-    const message = [
-      "Hi! I want to book MountAura.",
-      "",
-      `Name: ${form.fullName.trim() || "-"}`,
-      `Contact: ${form.contact.trim() || "-"}`,
-      `Email: ${form.email.trim() || "-"}`,
-      `Package: ${form.package === "adventure" ? "Adventure" : "Resort"}`,
-    ].join("\n");
-
-    return `https://wa.me/919643906583?text=${encodeURIComponent(message)}`;
-  }, [form]);
-
   const openForPlan = (pkg: "adventure" | "resort") => {
     lastFocusRef.current = document.activeElement instanceof HTMLElement ? document.activeElement : null;
     setForm((s) => ({ ...s, package: pkg }));
+    setSubmitState("idle");
+    setSubmitError("");
     setOpen(true);
   };
 
-  const onSubmit = (e: React.FormEvent) => {
+  const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    window.open(quickWhatsAppHref, "_blank", "noreferrer");
-    setUnlockedPackages({ adventure: true, resort: true });
-    closeModal();
+    if (submitState === "submitting") return;
+    setSubmitState("submitting");
+    setSubmitError("");
+
+    try {
+      const res = await fetch("/api/leads", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          fullName: form.fullName,
+          contact: form.contact,
+          email: form.email,
+          package: form.package,
+        }),
+      });
+
+      if (!res.ok) {
+        const data = (await res.json().catch(() => null)) as
+          | { error?: string; details?: string; status?: number }
+          | null;
+        const message = data?.error?.trim() || "Could not save details. Please try again.";
+        const details = data?.details?.trim();
+        throw new Error(details ? `${message} (${details})` : message);
+      }
+
+      setUnlockedPackages({ adventure: true, resort: true });
+      setSubmitState("success");
+      window.setTimeout(() => {
+        setForm((s) => ({ ...s, fullName: "", contact: "", email: "" }));
+        closeModal();
+      }, 1200);
+    } catch (err) {
+      setSubmitError(err instanceof Error ? err.message : "Could not save details. Please try again.");
+      setSubmitState("error");
+    }
   };
 
   return (
@@ -268,6 +295,22 @@ export default function PricingSection() {
               </div>
 
               <form onSubmit={onSubmit} className="grid gap-5 p-6">
+                {submitState === "success" ? (
+                  <div className="rounded-2xl border border-success/30 bg-success-soft px-4 py-3 text-sm font-semibold text-foreground">
+                    <div className="flex items-center gap-2">
+                      <Icon className="text-success-strong" path="M20 6L9 17l-5-5" />
+                      <span>Submitted! We&apos;ll contact you shortly.</span>
+                    </div>
+                  </div>
+                ) : null}
+                {submitState === "error" ? (
+                  <div className="rounded-2xl border border-[#ef4444]/30 bg-[#fef2f2] px-4 py-3 text-sm font-semibold text-foreground">
+                    <div className="flex items-center gap-2">
+                      <Icon className="text-[#ef4444]" path="M12 9v4m0 4h.01M10.29 3.86l-7.4 12.82A2 2 0 004.62 20h14.76a2 2 0 001.73-3.32l-7.4-12.82a2 2 0 00-3.42 0z" />
+                      <span>{submitError || "Could not save details. Please try again."}</span>
+                    </div>
+                  </div>
+                ) : null}
                 <label className="grid gap-1.5">
                   <span className="text-sm font-semibold text-foreground/80">Full Name</span>
                   <input
@@ -349,9 +392,10 @@ export default function PricingSection() {
 
               <button
                 type="submit"
+                disabled={submitState === "submitting" || submitState === "success"}
                 className="we-button inline-flex h-12 w-full items-center justify-center rounded-full bg-brand px-7 text-sm font-semibold text-white shadow-[0_20px_70px_rgba(0,0,0,0.25)] transition duration-300 hover:bg-brand-hover"
               >
-                Submit
+                {submitState === "submitting" ? "Saving..." : submitState === "success" ? "Saved" : "Submit"}
               </button>
               </form>
             </div>

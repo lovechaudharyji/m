@@ -271,57 +271,58 @@ export default function PricingSection() {
       {open ? (
         <div className="fixed inset-0 z-50">
           <div className="absolute inset-0 bg-black/40" onClick={closeModal} aria-hidden="true" />
-          <div className="absolute inset-0 grid place-items-center px-5 py-8">
-            <div
-              role="dialog"
-              aria-modal="true"
-              className="w-full max-w-lg overflow-hidden rounded-3xl border border-border bg-white shadow-[0_30px_90px_rgba(15,23,42,0.28)]"
-            >
-              <div className="flex items-center justify-between border-b border-border px-6 py-5">
-                <div>
-                  <div className="font-heading text-lg font-extrabold text-navy">Talk to Expert</div>
-                  <div className="mt-0.5 text-sm font-semibold text-foreground/60">
-                    Fill your details and select a package.
+          <div className="absolute inset-0 overflow-y-auto">
+            <div className="min-h-full flex items-start justify-center px-5 py-8 sm:items-center">
+              <div
+                role="dialog"
+                aria-modal="true"
+                className="w-full max-w-lg overflow-hidden rounded-3xl border border-border bg-white shadow-[0_30px_90px_rgba(15,23,42,0.28)]"
+              >
+                <div className="flex items-center justify-between border-b border-border px-6 py-5">
+                  <div>
+                    <div className="font-heading text-lg font-extrabold text-navy">Talk to Expert</div>
+                    <div className="mt-0.5 text-sm font-semibold text-foreground/60">
+                      Fill your details and select a package.
+                    </div>
                   </div>
+                  <button
+                    type="button"
+                    onClick={closeModal}
+                    className="we-button grid h-10 w-10 place-items-center rounded-2xl border border-border bg-white text-foreground shadow-sm transition hover:bg-white/80"
+                    aria-label="Close"
+                  >
+                    <Icon className="text-foreground" path="M6 6l12 12M18 6l-12 12" />
+                  </button>
                 </div>
-                <button
-                  type="button"
-                  onClick={closeModal}
-                  className="we-button grid h-10 w-10 place-items-center rounded-2xl border border-border bg-white text-foreground shadow-sm transition hover:bg-white/80"
-                  aria-label="Close"
-                >
-                  <Icon className="text-foreground" path="M6 6l12 12M18 6l-12 12" />
-                </button>
-              </div>
 
-              <form onSubmit={onSubmit} className="grid gap-5 p-6">
-                {submitState === "success" ? (
-                  <div className="rounded-2xl border border-success/30 bg-success-soft px-4 py-3 text-sm font-semibold text-foreground">
-                    <div className="flex items-center gap-2">
-                      <Icon className="text-success-strong" path="M20 6L9 17l-5-5" />
-                      <span>Submitted! We&apos;ll contact you shortly.</span>
+                <form onSubmit={onSubmit} className="grid gap-5 p-6">
+                  {submitState === "success" ? (
+                    <div className="rounded-2xl border border-success/30 bg-success-soft px-4 py-3 text-sm font-semibold text-foreground">
+                      <div className="flex items-center gap-2">
+                        <Icon className="text-success-strong" path="M20 6L9 17l-5-5" />
+                        <span>Submitted! We&apos;ll contact you shortly.</span>
+                      </div>
                     </div>
-                  </div>
-                ) : null}
-                {submitState === "error" ? (
-                  <div className="rounded-2xl border border-[#ef4444]/30 bg-[#fef2f2] px-4 py-3 text-sm font-semibold text-foreground">
-                    <div className="flex items-center gap-2">
-                      <Icon className="text-[#ef4444]" path="M12 9v4m0 4h.01M10.29 3.86l-7.4 12.82A2 2 0 004.62 20h14.76a2 2 0 001.73-3.32l-7.4-12.82a2 2 0 00-3.42 0z" />
-                      <span>{submitError || "Could not save details. Please try again."}</span>
+                  ) : null}
+                  {submitState === "error" ? (
+                    <div className="rounded-2xl border border-[#ef4444]/30 bg-[#fef2f2] px-4 py-3 text-sm font-semibold text-foreground">
+                      <div className="flex items-center gap-2">
+                        <Icon className="text-[#ef4444]" path="M12 9v4m0 4h.01M10.29 3.86l-7.4 12.82A2 2 0 004.62 20h14.76a2 2 0 001.73-3.32l-7.4-12.82a2 2 0 00-3.42 0z" />
+                        <span>{submitError || "Could not save details. Please try again."}</span>
+                      </div>
                     </div>
-                  </div>
-                ) : null}
-                <label className="grid gap-1.5">
-                  <span className="text-sm font-semibold text-foreground/80">Full Name</span>
-                  <input
-                    ref={firstFieldRef}
-                    value={form.fullName}
-                    onChange={(e) => setForm((s) => ({ ...s, fullName: e.target.value }))}
-                    required
-                    className="h-11 rounded-2xl border border-border bg-white px-4 text-sm text-foreground outline-none placeholder:text-foreground/40 focus:border-brand/60"
-                    placeholder="Your full name"
-                  />
-                </label>
+                  ) : null}
+                  <label className="grid gap-1.5">
+                    <span className="text-sm font-semibold text-foreground/80">Full Name</span>
+                    <input
+                      ref={firstFieldRef}
+                      value={form.fullName}
+                      onChange={(e) => setForm((s) => ({ ...s, fullName: e.target.value }))}
+                      required
+                      className="h-11 rounded-2xl border border-border bg-white px-4 text-sm text-foreground outline-none placeholder:text-foreground/40 focus:border-brand/60"
+                      placeholder="Your full name"
+                    />
+                  </label>
 
               <label className="grid gap-1.5">
                 <span className="text-sm font-semibold text-foreground/80">Contact</span>
@@ -398,6 +399,7 @@ export default function PricingSection() {
                 {submitState === "submitting" ? "Saving..." : submitState === "success" ? "Saved" : "Submit"}
               </button>
               </form>
+              </div>
             </div>
           </div>
         </div>

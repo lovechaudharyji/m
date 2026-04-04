@@ -2,6 +2,7 @@
 
 import { Icon, Reveal } from "@/app/_components/shared";
 import Image from "next/image";
+import Link from "next/link";
 import type { ReactNode } from "react";
 
 type FooterSectionProps = {
@@ -41,7 +42,7 @@ export default function FooterSection({ brandName, socialLinks }: FooterSectionP
     instagram: "#",
     twitter: "#",
     discord: "#",
-    whatsapp: "#booking",
+    whatsapp: "/#booking",
     ...socialLinks,
   };
 
@@ -52,7 +53,10 @@ export default function FooterSection({ brandName, socialLinks }: FooterSectionP
           <div className="md:col-span-2">
             <div className="flex items-center gap-3">
               <Image src="/images/mountaura.png" alt={brandName} width={44} height={44} className="h-11 w-11 object-contain" />
-              <div className="font-heading text-xl font-extrabold tracking-tight text-navy">{brandName}</div>
+              <div>
+                <div className="font-heading text-xl font-extrabold tracking-tight text-navy">{brandName}</div>
+                <div className="text-xs font-semibold text-foreground/70">Feel the Aura of Mountains</div>
+              </div>
             </div>
             <p className="mt-3 max-w-sm text-sm leading-6 text-foreground/70">
               Built for busy professionals who want a real weekend without taking leaves.
@@ -83,27 +87,30 @@ export default function FooterSection({ brandName, socialLinks }: FooterSectionP
               Quick Links
             </div>
             <div className="grid gap-2 text-sm font-semibold text-foreground/70">
-              <a className="transition hover:text-foreground" href="#experience">
+              <Link className="transition hover:text-foreground" href="/#experience">
                 Experience
-              </a>
-              <a className="transition hover:text-foreground" href="#pricing">
+              </Link>
+              <Link className="transition hover:text-foreground" href="/#pricing">
                 Pricing
-              </a>
-              <a className="transition hover:text-foreground" href="#itinerary">
+              </Link>
+              <Link className="transition hover:text-foreground" href="/#itinerary">
                 Itinerary
-              </a>
-              <a className="transition hover:text-foreground" href="#faq">
+              </Link>
+              <Link className="transition hover:text-foreground" href="/#faq">
                 FAQs
-              </a>
-              <a className="transition hover:text-foreground" href="#gallery">
+              </Link>
+              <Link className="transition hover:text-foreground" href="/#gallery">
                 Gallery
-              </a>
-              <a className="transition hover:text-foreground" href="#booking">
+              </Link>
+              <Link className="transition hover:text-foreground" href="/#booking">
                 Booking
-              </a>
-              <a className="transition hover:text-foreground" href="/comfort">
+              </Link>
+              <Link className="transition hover:text-foreground" href="/comfort">
                 Comfort Details
-              </a>
+              </Link>
+              <Link className="transition hover:text-foreground" href="/terms">
+                Terms & Conditions
+              </Link>
             </div>
           </div>
 
@@ -128,13 +135,13 @@ export default function FooterSection({ brandName, socialLinks }: FooterSectionP
                 </div>
               </div>
 
-              <a
-                href="#booking"
+              <Link
+                href="/#booking"
                 className="we-button mt-5 inline-flex h-12 w-full items-center justify-center gap-2 rounded-full bg-brand px-7 text-sm font-semibold text-white shadow-[0_4px_14px_rgba(0,0,0,0.10)] transition duration-300 hover:bg-brand-hover"
               >
                 <Icon className="text-white" path="M5 12h14M13 5l7 7-7 7" />
                 <span>Book Now</span>
-              </a>
+              </Link>
 
               <div className="mt-6">
                 <div className="mb-3 font-heading text-sm font-extrabold text-foreground">Follow us</div>
@@ -171,12 +178,9 @@ export default function FooterSection({ brandName, socialLinks }: FooterSectionP
         <Reveal delayMs={120} className="mt-10 flex flex-col items-center justify-between gap-4 border-t border-border pt-6 text-xs font-semibold text-foreground/60 sm:flex-row">
           <span>© {new Date().getFullYear()} {brandName}. All rights reserved.</span>
           <div className="flex flex-wrap items-center justify-center gap-4">
-            <a className="transition hover:text-foreground" href="/terms">
-              Terms
-            </a>
-            <a className="transition hover:text-foreground" href="/conditions">
-              Conditions
-            </a>
+            <Link className="transition hover:text-foreground" href="/terms">
+              Terms & Conditions
+            </Link>
             <span className="inline-flex items-center gap-2">
               <Icon className="text-brand" path="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 22 12 18.56 5.82 22 7 14.14 2 9.27l6.91-1.01L12 2z" />
               <span>Made for weekends</span>

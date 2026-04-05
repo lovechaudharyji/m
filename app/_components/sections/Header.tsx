@@ -94,9 +94,9 @@ export default function Header({ brandName }: HeaderProps) {
           <a href="#itinerary" className="hover:text-foreground">
             Itinerary
           </a>
-          <a href="#contact" className="hover:text-foreground">
+          <Link href="/contact" className="hover:text-foreground">
             Contact Us
-          </a>
+          </Link>
         </nav>
 
         <div className="flex items-center gap-3">
@@ -245,14 +245,14 @@ export default function Header({ brandName }: HeaderProps) {
                 />
                 <span>Itinerary</span>
               </a>
-              <a
-                href="#contact"
+              <Link
+                href="/contact"
                 className="we-button flex items-center gap-3 rounded-2xl px-4 py-3 hover:bg-white"
                 onClick={closeMenu}
               >
                 <Icon className="text-foreground/70" path="M21 15a4 4 0 01-4 4H7l-4 4V7a4 4 0 014-4h10a4 4 0 014 4z" />
                 <span>Contact Us</span>
-              </a>
+              </Link>
             </div>
 
             <div className="flex items-center gap-3 border-t border-border p-3">

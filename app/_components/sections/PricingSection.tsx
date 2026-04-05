@@ -253,7 +253,7 @@ export default function PricingSection() {
                     </span>
                   </button>
                   <a
-                    href={plan.icon === "hotel" ? "/comfort" : "#itinerary"}
+                    href={plan.icon === "hotel" ? "/comfort" : "/adventure"}
                     className="we-button inline-flex h-12 w-full items-center justify-center rounded-full border border-border bg-white px-7 text-sm font-semibold text-foreground shadow-sm transition hover:bg-white/80"
                   >
                     <span className="inline-flex items-center justify-center gap-2">

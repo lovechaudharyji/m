@@ -6,27 +6,27 @@ import BookingSection from "@/app/_components/sections/BookingSection";
 
 const fridayItems = [
   {
-    time: "8:00 PM",
+    time: "",
     title: "Departure from Delhi NCR",
     description:
       "Board the MountAura Traveller from a central pick-up point. Meet your fellow travellers, exchange stories, and kick off the adventure.",
     iconPath: "M5 16l3-8h8l3 8 M7 16v4 M17 16v4 M6 20h12 M7 12h10 M9 8V6a1 1 0 011-1h4a1 1 0 011 1v2",
   },
   {
-    time: "9:00 PM",
+    time: "",
     title: "Ice-Breakers & Games",
     description: "Fun introductions and group games to break the ice. New friendships begin here!",
     iconPath:
       "M17 21v-2a4 4 0 00-4-4H6a4 4 0 00-4 4v2 M13 7a4 4 0 11-8 0 4 4 0 018 0 M23 21v-2a4 4 0 00-3-3.87 M19 7a4 4 0 010 7.75",
   },
   {
-    time: "10:30 PM",
+    time: "",
     title: "Music, Snacks & Vibes",
     description: "Music, chai & munchies as the city fades behind you. Enjoy the night highway views.",
     iconPath: "M9 18V5l12-2v13 M9 18a3 3 0 11-6 0 3 3 0 016 0z M21 16a3 3 0 11-6 0 3 3 0 016 0z",
   },
   {
-    time: "12:00 AM",
+    time: "",
     title: "Rest & Recharge",
     description: "Recline your seats, put on your playlist, and drift off. You'll wake up to mountain air.",
     iconPath:

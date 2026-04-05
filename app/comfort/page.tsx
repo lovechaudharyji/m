@@ -6,27 +6,27 @@ import BookingSection from "@/app/_components/sections/BookingSection";
 
 const thursdayItems = [
   {
-    time: "8:00 PM",
+    time: "",
     title: "Departure from Delhi NCR",
     description:
       "Board the MountAura Traveller from a central pick-up point. Meet your fellow travellers, exchange stories, and kick off the adventure.",
     iconPath: "M5 16l3-8h8l3 8 M7 16v4 M17 16v4 M6 20h12 M7 12h10 M9 8V6a1 1 0 011-1h4a1 1 0 011 1v2",
   },
   {
-    time: "9:00 PM",
+    time: "",
     title: "Ice-Breakers & Games",
     description: "Fun introductions and group games to break the ice. New friendships begin here.",
     iconPath:
       "M17 21v-2a4 4 0 00-4-4H6a4 4 0 00-4 4v2 M13 7a4 4 0 11-8 0 4 4 0 018 0 M23 21v-2a4 4 0 00-3-3.87 M19 7a4 4 0 010 7.75",
   },
   {
-    time: "10:30 PM",
+    time: "",
     title: "Music, Snacks & Vibes",
     description: "Music, chai & munchies as the city fades behind you. Enjoy the night highway views.",
     iconPath: "M9 18V5l12-2v13M9 18a2 2 0 11-4 0 2 2 0 014 0zm12-2a2 2 0 11-4 0 2 2 0 014 0z",
   },
   {
-    time: "12:00 AM",
+    time: "",
     title: "Rest & Recharge",
     description: "Recline your seats, put on your playlist, and drift off. You'll wake up to mountain air.",
     iconPath: "M12 6v6l4 2 M12 22a10 10 0 110-20 10 10 0 010 20z",
@@ -41,13 +41,46 @@ const fridayItems = [
       "Step out to crisp mountain air. Feel the aura of the Himalayas as you breathe in the freshness of pine-scented mornings.",
     iconPath: "M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 1118 0z M12 10a3 3 0 110-6 3 3 0 010 6z",
   },
+
+   {
+    time: "",
+    title: "Maa Chamunda Devi Temple",
+    description:
+      "Chamunda Devi Temple is a revered shrine of Goddess Chamunda, set beside a river with stunning mountain views, known for its strong spiritual energy and peaceful vibe",
+    iconPath: "M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 1118 0z M12 10a3 3 0 110-6 3 3 0 010 6z",
+  },
+
+   {
+    time: "",
+    title: "Dalai Lama Monastery",
+    description:
+      "(Dalai Lama Monastery) is a peaceful Tibetan spiritual center, known for its prayer halls, monks, and serene atmosphere—perfect for meditation and cultural experience",
+    iconPath: "M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 1118 0z M12 10a3 3 0 110-6 3 3 0 010 6z",
+  },
   {
-    time: "7:00 AM",
+    time: "",
     title: "McLeodganj Hotel Check-in + Market Walk",
     description:
       "Freshen up and relax. Explore the McLeodganj flea market for local handicrafts and souvenirs.",
     iconPath:
       "M6 6h15l-1.5 9h-13L5 3H2 M7 20a1 1 0 100 2 1 1 0 000-2z M17 20a1 1 0 100 2 1 1 0 000-2z",
+  },
+
+  {
+    time: "",
+    title: "Breakfast",
+    description:
+      "Pratha + Butter + Tea",
+    iconPath:
+      "M6 6h15l-1.5 9h-13L5 3H2 M7 20a1 1 0 100 2 1 1 0 000-2z M17 20a1 1 0 100 2 1 1 0 000-2z",
+  },
+
+    {
+    time: "Late Morning",
+    title: "Bhagsu Nag Temple + Natural Swimming Pool",
+    description:
+      "Bhagsu Nag Temple is an ancient Shiva temple known for its sacred water pool and nearby Bhagsu Waterfall, offering a peaceful spiritual vibe amidst scenic mountain views.",
+    iconPath: "M3 20l7-12 4 7 3-5 4 10H3z",
   },
   {
     time: "Late Morning",
@@ -58,7 +91,7 @@ const fridayItems = [
   },
   {
     time: "Afternoon",
-    title: "Dalai Lama Monastery + Café Time",
+    title: "Dalai Lama Monastery ",
     description:
       "Visit the Dalai Lama Monastery and unwind at cozy hillside cafés with stunning views.",
     iconPath:
@@ -66,7 +99,7 @@ const fridayItems = [
   },
   {
     time: "Evening",
-    title: "Dinner + Overnight Stay",
+    title: "Dinner (Himachal Pradesh Special Kangri Dham) + Overnight Stay",
     description: "Return to the hotel, enjoy dinner, and settle in for a peaceful overnight stay.",
     iconPath: "M4 4h16v16H4z M7 9h10 M7 12h10 M7 15h7",
   },

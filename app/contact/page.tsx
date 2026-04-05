@@ -1,37 +1,14 @@
 "use client";
 
-import { useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { motion } from "framer-motion";
 import { ChevronDown, Mail, Phone } from "lucide-react";
 import Header from "@/app/_components/sections/Header";
 import FooterSection from "@/app/_components/sections/FooterSection";
 
-const contactItems = [
-  {
-    icon: Phone,
-    label: "Call Us",
-    value: "9643906583",
-    href: "tel:+919643906583",
-  },
-  {
-    icon: Phone,
-    label: "Call Now",
-    value: "9643906583",
-    href: "tel:+919643906583",
-  },
-  {
-    icon: Mail,
-    label: "Email Us",
-    value: "mountauraofficial@gmail.com",
-    href: "mailto:mountauraofficial@gmail.com",
-  },
-  {
-    icon: Mail,
-    label: "Support Email",
-    value: "mountauraofficial@gmail.com",
-    href: "mailto:mountauraofficial@gmail.com",
-  },
-] as const;
+type ContactApiResponse = {
+  contacts?: Array<{ number?: string; email?: string }>;
+};
 
 function FacebookIcon() {
   return (
@@ -160,6 +137,87 @@ function ContactHero() {
 }
 
 function ContactInfo() {
+  const [remoteNumbers, setRemoteNumbers] = useState<string[] | null>(null);
+  const [remoteEmails, setRemoteEmails] = useState<string[] | null>(null);
+
+  useEffect(() => {
+    let cancelled = false;
+    const run = async () => {
+      try {
+        const res = await fetch("/api/contact", { cache: "no-store" });
+        if (!res.ok) return;
+        const data = (await res.json()) as ContactApiResponse;
+        const contacts = data.contacts ?? [];
+
+        const numbers = Array.from(
+          new Set(
+            contacts
+              .map((c) => c.number?.trim())
+              .filter((v): v is string => Boolean(v)),
+          ),
+        );
+
+        const emails = Array.from(
+          new Set(
+            contacts
+              .map((c) => c.email?.trim())
+              .filter((v): v is string => Boolean(v)),
+          ),
+        );
+
+        if (cancelled) return;
+        setRemoteNumbers(numbers.length ? numbers : []);
+        setRemoteEmails(emails.length ? emails : []);
+      } catch {
+        if (cancelled) return;
+        setRemoteNumbers([]);
+        setRemoteEmails([]);
+      }
+    };
+
+    run();
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  const numbers = useMemo(() => (remoteNumbers && remoteNumbers.length ? remoteNumbers : ["9643906583"]), [remoteNumbers]);
+  const emails = useMemo(
+    () => (remoteEmails && remoteEmails.length ? remoteEmails : ["mountauraofficial@gmail.com"]),
+    [remoteEmails],
+  );
+
+  const contactItems = useMemo(
+    () =>
+      [
+        {
+          icon: Phone,
+          label: "Call Us",
+          value: numbers[0] ?? "9643906583",
+          href: `tel:+91${numbers[0] ?? "9643906583"}`,
+        },
+        {
+          icon: Phone,
+          label: "Call Now",
+          value: numbers[1] ?? numbers[0] ?? "9643906583",
+          href: `tel:+91${numbers[1] ?? numbers[0] ?? "9643906583"}`,
+        },
+        {
+          icon: Mail,
+          label: "Email Us",
+          value: emails[0] ?? "mountauraofficial@gmail.com",
+          href: `mailto:${emails[0] ?? "mountauraofficial@gmail.com"}`,
+        },
+        {
+          icon: Mail,
+          label: "Support Email",
+          value: emails[1] ?? emails[0] ?? "mountauraofficial@gmail.com",
+          href: `mailto:${emails[1] ?? emails[0] ?? "mountauraofficial@gmail.com"}`,
+        },
+      ] as const,
+    [emails, numbers],
+  );
+
   const socials = useMemo(
     () => [
       { name: "Facebook", href: "https://facebook.com/", icon: FacebookIcon },

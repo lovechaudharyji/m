@@ -3,6 +3,7 @@
 import { Icon, Reveal } from "@/app/_components/shared";
 import Image from "next/image";
 import Link from "next/link";
+import { useEffect, useState } from "react";
 import type { ReactNode } from "react";
 
 type FooterSectionProps = {
@@ -37,6 +38,10 @@ function SocialLink({
   );
 }
 
+type ContactApiResponse = {
+  contacts?: Array<{ number?: string; email?: string }>;
+};
+
 export default function FooterSection({ brandName, socialLinks }: FooterSectionProps) {
   const links = {
     instagram: "#",
@@ -45,6 +50,42 @@ export default function FooterSection({ brandName, socialLinks }: FooterSectionP
     whatsapp: "/#booking",
     ...socialLinks,
   };
+
+  const [remoteNumber, setRemoteNumber] = useState<string | null>(null);
+  const [remoteEmail, setRemoteEmail] = useState<string | null>(null);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    const run = async () => {
+      try {
+        const res = await fetch("/api/contact", { cache: "no-store" });
+        if (!res.ok) return;
+        const data = (await res.json()) as ContactApiResponse;
+        const contacts = data.contacts ?? [];
+
+        const number = contacts
+          .map((c) => c.number?.trim())
+          .find((v): v is string => Boolean(v));
+
+        const email = contacts
+          .map((c) => c.email?.trim())
+          .find((v): v is string => Boolean(v));
+
+        if (cancelled) return;
+        if (number) setRemoteNumber(number);
+        if (email) setRemoteEmail(email);
+      } catch {}
+    };
+
+    run();
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  const phoneNumber = remoteNumber ?? "9643906583";
+  const emailAddress = remoteEmail ?? "lovechaudhary6583@gmail.com";
 
   return (
     <footer id="contact" className="border-t border-border bg-background">
@@ -121,13 +162,13 @@ export default function FooterSection({ brandName, socialLinks }: FooterSectionP
               </div>
 
               <div className="mt-4 grid gap-2 text-sm font-semibold text-foreground/70">
-                <a className="inline-flex items-center gap-2 transition hover:text-foreground" href="tel:+919643906583">
+                <a className="inline-flex items-center gap-2 transition hover:text-foreground" href={`tel:+91${phoneNumber}`}>
                   <Icon className="text-brand" path="M22 16.92v3a2 2 0 01-2.18 2 19.86 19.86 0 01-8.63-3.07 19.5 19.5 0 01-6-6A19.86 19.86 0 012.08 4.18 2 2 0 014.06 2h3a2 2 0 012 1.72c.12.86.31 1.7.57 2.5a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.58-1.58a2 2 0 012.11-.45c.8.26 1.64.45 2.5.57A2 2 0 0122 16.92z" />
-                  <span>9643906583</span>
+                  <span>{phoneNumber}</span>
                 </a>
-                <a className="inline-flex items-center gap-2 transition hover:text-foreground" href="mailto:lovechaudhary6583@gmail.com">
+                <a className="inline-flex items-center gap-2 transition hover:text-foreground" href={`mailto:${emailAddress}`}>
                   <Icon className="text-brand" path="M4 4h16v16H4z M22 6l-10 7L2 6" />
-                  <span>lovechaudhary6583@gmail.com</span>
+                  <span>{emailAddress}</span>
                 </a>
                 <div className="mt-2 flex items-center gap-2">
                   <Icon className="text-brand" path="M21 15a4 4 0 01-4 4H7l-4 4V7a4 4 0 014-4h10a4 4 0 014 4z" />

@@ -164,15 +164,15 @@ const sundayItems = [
   },
   {
     time: "Late Morning",
-    title: "Explore Tibetan Culture",
-    description: "Visit the Dalai Lama Temple and soak in the peaceful Tibetan vibes of McLeodganj.",
+    title: "Explore Tea Gardens",
+    description: "Tea gardens are lush green plantations spread across rolling hills, offering scenic views, fresh mountain air, and a calm, refreshing escape into nature.",
     iconPath:
       "M4 21V5a2 2 0 012-2h7a2 2 0 012 2v16M9 21V7M13 21v-8M20 21V11a2 2 0 00-2-2h-4",
   },
   {
     time: "Afternoon",
-    title: "Stadium + Tea Gardens",
-    description: "Take a stroll around the Dharamshala Cricket Stadium and wander through lush tea gardens.",
+    title: "Himachal Pradesh Cricket Association Stadium",
+    description: "one of the most scenic cricket stadiums in the world, set against the stunning Dhauladhar mountains, offering breathtaking views along with thrilling matches.",
     iconPath: "M4 7h16M4 12h16M4 17h16",
   },
   {

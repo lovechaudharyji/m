@@ -43,17 +43,25 @@ const plans: Plan[] = [
     price: "₹6,999",
     earlyBird: "₹5,799",
     features: [
-      "Transport: Volvo Delhi to Dharamshala",
-      "Hotel stay (1 night)",
-      "McLeod Ganj market",
+      "Departure from Delhi NCR (MountAura Traveller)",
+      "Ice-breaker games & group introductions",
+      "Arrival in Kangra Valley",
+      "Maa Chamunda Devi Temple",
       "Dalai Lama Monastery",
-      "HPCA Stadium",
-      "Triund Trek (Guide Experience)",
-      "Camping under the stars",
-      "Bonfire Night",
-      "Dinner and Breakfast",
-      "Group photograph and fun activities",
-      "Meet new connections",
+      "McLeodganj Hotel Check-in + Market Walk",
+      "Breakfast",
+      "Bhagsu Nag Temple + Natural Swimming Pool",
+      "Bhagsu Waterfall + Spiritual Aura",
+      "Dalai Lama Monastery",
+      "Dinner (Himachal Pradesh Special Kangri Dham) + Overnight Stay",
+      "Breakfast",
+      "Start Triund trek (Scenic viewpoints & Dhauladhar view)",
+      "Reach Triund Top & camp setup",
+      "Bonfire, games & social time (Dinner at campsite)",
+      "Sunrise view over Dhauladhar peaks (Breakfast at campsite)",
+      "HPCA Dharamshala Cricket Stadium",
+      "Tea Gardens",
+      "Return Departure",
     ],
     popular: true,
   },
@@ -233,8 +241,8 @@ export default function PricingSection() {
                 </div>
 
                 <ul className="mb-8 space-y-3 text-sm text-foreground/75">
-                  {plan.features.map((f) => (
-                    <li key={f} className="flex items-center gap-2">
+                  {plan.features.map((f, idx) => (
+                    <li key={`${plan.title}-${idx}`} className="flex items-center gap-2">
                       <span className="text-success-strong">✓</span>
                       <span className="font-semibold">{f}</span>
                     </li>

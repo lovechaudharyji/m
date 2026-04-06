@@ -139,7 +139,7 @@ export function PageLoadGate({ children }: { children: ReactNode }) {
   }, []);
 
   return (
-    <div className="relative flex min-h-full flex-1">
+    <div className="relative flex min-h-full w-full flex-1 flex-col">
       {children}
       {!ready ? (
         <div className="pointer-events-none fixed inset-0 z-[70] bg-background">

@@ -3,7 +3,6 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { usePathname } from "next/navigation";
 import { Icon } from "@/app/_components/shared";
 
 type HeaderProps = {
@@ -19,7 +18,6 @@ export default function Header({ brandName }: HeaderProps) {
   const [mobilePlansOpen, setMobilePlansOpen] = useState(false);
   const [contactOpen, setContactOpen] = useState(false);
   const [remoteNumbers, setRemoteNumbers] = useState<string[] | null>(null);
-  const pathname = usePathname();
 
   const closeMenu = () => {
     setOpen(false);
@@ -55,11 +53,6 @@ export default function Header({ brandName }: HeaderProps) {
     window.addEventListener("keydown", onKeyDown);
     return () => window.removeEventListener("keydown", onKeyDown);
   }, [open, contactOpen]);
-
-  useEffect(() => {
-    if (window.location.hash) return;
-    window.scrollTo({ top: 0, left: 0, behavior: "auto" });
-  }, [pathname]);
 
   useEffect(() => {
     let cancelled = false;

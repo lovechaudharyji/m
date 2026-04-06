@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import { PageLoadGate } from "./_components/shared";
 
 export const metadata: Metadata = {
   title: "MountAura",
@@ -18,7 +19,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="h-full antialiased">
-      <body className="min-h-full flex flex-col">{children}</body>
+      <body className="min-h-full flex flex-col">
+        <PageLoadGate>{children}</PageLoadGate>
+      </body>
     </html>
   );
 }

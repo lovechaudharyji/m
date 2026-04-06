@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import { cn, Icon, Reveal } from "@/app/_components/shared";
 
 type Plan = {
@@ -69,8 +70,11 @@ const plans: Plan[] = [
 
 export default function PricingSection() {
   const [open, setOpen] = useState(false);
+  const [portalReady, setPortalReady] = useState(false);
   const lastFocusRef = useRef<HTMLElement | null>(null);
   const firstFieldRef = useRef<HTMLInputElement | null>(null);
+  const restoreFocusTimeoutRef = useRef<number | null>(null);
+  const autoCloseTimeoutRef = useRef<number | null>(null);
   const [unlockedPackages, setUnlockedPackages] = useState({
     adventure: false,
     resort: false,
@@ -85,12 +89,34 @@ export default function PricingSection() {
   const [submitError, setSubmitError] = useState<string>("");
 
   const closeModal = () => {
+    if (autoCloseTimeoutRef.current !== null) {
+      window.clearTimeout(autoCloseTimeoutRef.current);
+      autoCloseTimeoutRef.current = null;
+    }
+    if (restoreFocusTimeoutRef.current !== null) {
+      window.clearTimeout(restoreFocusTimeoutRef.current);
+      restoreFocusTimeoutRef.current = null;
+    }
     setOpen(false);
     setSubmitState("idle");
     setSubmitError("");
     const el = lastFocusRef.current;
-    window.setTimeout(() => el?.focus?.(), 0);
+    restoreFocusTimeoutRef.current = window.setTimeout(() => el?.focus?.(), 0);
   };
+
+  useEffect(() => {
+    setPortalReady(true);
+    return () => {
+      if (autoCloseTimeoutRef.current !== null) {
+        window.clearTimeout(autoCloseTimeoutRef.current);
+        autoCloseTimeoutRef.current = null;
+      }
+      if (restoreFocusTimeoutRef.current !== null) {
+        window.clearTimeout(restoreFocusTimeoutRef.current);
+        restoreFocusTimeoutRef.current = null;
+      }
+    };
+  }, []);
 
   useEffect(() => {
     if (!open) return;
@@ -128,6 +154,14 @@ export default function PricingSection() {
   }, []);
 
   const openForPlan = (pkg: "adventure" | "resort") => {
+    if (autoCloseTimeoutRef.current !== null) {
+      window.clearTimeout(autoCloseTimeoutRef.current);
+      autoCloseTimeoutRef.current = null;
+    }
+    if (restoreFocusTimeoutRef.current !== null) {
+      window.clearTimeout(restoreFocusTimeoutRef.current);
+      restoreFocusTimeoutRef.current = null;
+    }
     lastFocusRef.current = document.activeElement instanceof HTMLElement ? document.activeElement : null;
     setForm((s) => ({ ...s, package: pkg }));
     setSubmitState("idle");
@@ -164,7 +198,11 @@ export default function PricingSection() {
 
       setUnlockedPackages({ adventure: true, resort: true });
       setSubmitState("success");
-      window.setTimeout(() => {
+      if (autoCloseTimeoutRef.current !== null) {
+        window.clearTimeout(autoCloseTimeoutRef.current);
+        autoCloseTimeoutRef.current = null;
+      }
+      autoCloseTimeoutRef.current = window.setTimeout(() => {
         setForm((s) => ({ ...s, fullName: "", contact: "", email: "" }));
         closeModal();
       }, 1200);
@@ -281,142 +319,148 @@ export default function PricingSection() {
         </Reveal>
       </div>
 
-      {open ? (
-        <div className="fixed inset-0 z-50">
-          <div className="absolute inset-0 bg-black/40" onClick={closeModal} aria-hidden="true" />
-          <div className="absolute inset-0 overflow-y-auto">
-            <div className="min-h-full flex items-start justify-center px-5 py-8 sm:items-center">
-              <div
-                role="dialog"
-                aria-modal="true"
-                className="w-full max-w-lg overflow-hidden rounded-3xl border border-border bg-white shadow-[0_30px_90px_rgba(15,23,42,0.28)]"
-              >
-                <div className="flex items-center justify-between border-b border-border px-6 py-5">
-                  <div>
-                    <div className="font-heading text-lg font-extrabold text-navy">Talk to Expert</div>
-                    <div className="mt-0.5 text-sm font-semibold text-foreground/60">
-                      Fill your details and select a package.
+      {portalReady && open
+        ? createPortal(
+            <div className="fixed inset-0 z-50">
+              <div className="absolute inset-0 bg-black/40" onClick={closeModal} aria-hidden="true" />
+              <div className="absolute inset-0 overflow-y-auto">
+                <div className="min-h-full flex items-start justify-center px-5 py-8 sm:items-center">
+                  <div
+                    role="dialog"
+                    aria-modal="true"
+                    className="w-full max-w-lg overflow-hidden rounded-3xl border border-border bg-white shadow-[0_30px_90px_rgba(15,23,42,0.28)]"
+                  >
+                    <div className="flex items-center justify-between border-b border-border px-6 py-5">
+                      <div>
+                        <div className="font-heading text-lg font-extrabold text-navy">Talk to Expert</div>
+                        <div className="mt-0.5 text-sm font-semibold text-foreground/60">
+                          Fill your details and select a package.
+                        </div>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={closeModal}
+                        className="we-button grid h-10 w-10 place-items-center rounded-2xl border border-border bg-white text-foreground shadow-sm transition hover:bg-white/80"
+                        aria-label="Close"
+                      >
+                        <Icon className="text-foreground" path="M6 6l12 12M18 6l-12 12" />
+                      </button>
                     </div>
+
+                    <form onSubmit={onSubmit} className="grid gap-5 p-6">
+                      {submitState === "success" ? (
+                        <div className="rounded-2xl border border-success/30 bg-success-soft px-4 py-3 text-sm font-semibold text-foreground">
+                          <div className="flex items-center gap-2">
+                            <Icon className="text-success-strong" path="M20 6L9 17l-5-5" />
+                            <span>Submitted! We&apos;ll contact you shortly.</span>
+                          </div>
+                        </div>
+                      ) : null}
+                      {submitState === "error" ? (
+                        <div className="rounded-2xl border border-[#ef4444]/30 bg-[#fef2f2] px-4 py-3 text-sm font-semibold text-foreground">
+                          <div className="flex items-center gap-2">
+                            <Icon
+                              className="text-[#ef4444]"
+                              path="M12 9v4m0 4h.01M10.29 3.86l-7.4 12.82A2 2 0 004.62 20h14.76a2 2 0 001.73-3.32l-7.4-12.82a2 2 0 00-3.42 0z"
+                            />
+                            <span>{submitError || "Could not save details. Please try again."}</span>
+                          </div>
+                        </div>
+                      ) : null}
+                      <label className="grid gap-1.5">
+                        <span className="text-sm font-semibold text-foreground/80">Full Name</span>
+                        <input
+                          ref={firstFieldRef}
+                          value={form.fullName}
+                          onChange={(e) => setForm((s) => ({ ...s, fullName: e.target.value }))}
+                          required
+                          className="h-11 rounded-2xl border border-border bg-white px-4 text-sm text-foreground outline-none placeholder:text-foreground/40 focus:border-brand/60"
+                          placeholder="Your full name"
+                        />
+                      </label>
+
+                      <label className="grid gap-1.5">
+                        <span className="text-sm font-semibold text-foreground/80">Contact</span>
+                        <input
+                          value={form.contact}
+                          onChange={(e) => setForm((s) => ({ ...s, contact: e.target.value }))}
+                          required
+                          inputMode="tel"
+                          className="h-11 rounded-2xl border border-border bg-white px-4 text-sm text-foreground outline-none placeholder:text-foreground/40 focus:border-brand/60"
+                          placeholder="Your phone number"
+                        />
+                      </label>
+
+                      <label className="grid gap-1.5">
+                        <span className="text-sm font-semibold text-foreground/80">Email</span>
+                        <input
+                          value={form.email}
+                          onChange={(e) => setForm((s) => ({ ...s, email: e.target.value }))}
+                          required
+                          type="email"
+                          className="h-11 rounded-2xl border border-border bg-white px-4 text-sm text-foreground outline-none placeholder:text-foreground/40 focus:border-brand/60"
+                          placeholder="name@company.com"
+                        />
+                      </label>
+
+                      <div className="grid gap-2">
+                        <div className="text-sm font-semibold text-foreground/80">Package</div>
+                        <div className="grid gap-2 sm:grid-cols-2">
+                          <label
+                            className={cn(
+                              "we-button flex h-11 cursor-pointer items-center justify-center gap-2 rounded-2xl border border-border bg-white px-4 text-sm font-semibold text-foreground transition hover:bg-white/80",
+                              form.package === "adventure" ? "border-brand/60 ring-2 ring-brand/20" : "",
+                            )}
+                          >
+                            <input
+                              type="radio"
+                              name="package"
+                              value="adventure"
+                              checked={form.package === "adventure"}
+                              onChange={() => setForm((s) => ({ ...s, package: "adventure" }))}
+                              className="sr-only"
+                            />
+                            <Icon className="text-foreground" path="M3 20l7-12 4 7 3-5 4 10H3z" />
+                            <span>Adventure</span>
+                          </label>
+                          <label
+                            className={cn(
+                              "we-button flex h-11 cursor-pointer items-center justify-center gap-2 rounded-2xl border border-border bg-white px-4 text-sm font-semibold text-foreground transition hover:bg-white/80",
+                              form.package === "resort" ? "border-brand/60 ring-2 ring-brand/20" : "",
+                            )}
+                          >
+                            <input
+                              type="radio"
+                              name="package"
+                              value="resort"
+                              checked={form.package === "resort"}
+                              onChange={() => setForm((s) => ({ ...s, package: "resort" }))}
+                              className="sr-only"
+                            />
+                            <Icon
+                              className="text-foreground"
+                              path="M4 21V5a2 2 0 012-2h7a2 2 0 012 2v16M9 21V7M13 21v-8M20 21V11a2 2 0 00-2-2h-4"
+                            />
+                            <span>Resort</span>
+                          </label>
+                        </div>
+                      </div>
+
+                      <button
+                        type="submit"
+                        disabled={submitState === "submitting" || submitState === "success"}
+                        className="we-button inline-flex h-12 w-full items-center justify-center rounded-full bg-brand px-7 text-sm font-semibold text-white shadow-[0_20px_70px_rgba(0,0,0,0.25)] transition duration-300 hover:bg-brand-hover"
+                      >
+                        {submitState === "submitting" ? "Saving..." : submitState === "success" ? "Saved" : "Submit"}
+                      </button>
+                    </form>
                   </div>
-                  <button
-                    type="button"
-                    onClick={closeModal}
-                    className="we-button grid h-10 w-10 place-items-center rounded-2xl border border-border bg-white text-foreground shadow-sm transition hover:bg-white/80"
-                    aria-label="Close"
-                  >
-                    <Icon className="text-foreground" path="M6 6l12 12M18 6l-12 12" />
-                  </button>
-                </div>
-
-                <form onSubmit={onSubmit} className="grid gap-5 p-6">
-                  {submitState === "success" ? (
-                    <div className="rounded-2xl border border-success/30 bg-success-soft px-4 py-3 text-sm font-semibold text-foreground">
-                      <div className="flex items-center gap-2">
-                        <Icon className="text-success-strong" path="M20 6L9 17l-5-5" />
-                        <span>Submitted! We&apos;ll contact you shortly.</span>
-                      </div>
-                    </div>
-                  ) : null}
-                  {submitState === "error" ? (
-                    <div className="rounded-2xl border border-[#ef4444]/30 bg-[#fef2f2] px-4 py-3 text-sm font-semibold text-foreground">
-                      <div className="flex items-center gap-2">
-                        <Icon className="text-[#ef4444]" path="M12 9v4m0 4h.01M10.29 3.86l-7.4 12.82A2 2 0 004.62 20h14.76a2 2 0 001.73-3.32l-7.4-12.82a2 2 0 00-3.42 0z" />
-                        <span>{submitError || "Could not save details. Please try again."}</span>
-                      </div>
-                    </div>
-                  ) : null}
-                  <label className="grid gap-1.5">
-                    <span className="text-sm font-semibold text-foreground/80">Full Name</span>
-                    <input
-                      ref={firstFieldRef}
-                      value={form.fullName}
-                      onChange={(e) => setForm((s) => ({ ...s, fullName: e.target.value }))}
-                      required
-                      className="h-11 rounded-2xl border border-border bg-white px-4 text-sm text-foreground outline-none placeholder:text-foreground/40 focus:border-brand/60"
-                      placeholder="Your full name"
-                    />
-                  </label>
-
-              <label className="grid gap-1.5">
-                <span className="text-sm font-semibold text-foreground/80">Contact</span>
-                <input
-                  value={form.contact}
-                  onChange={(e) => setForm((s) => ({ ...s, contact: e.target.value }))}
-                  required
-                  inputMode="tel"
-                  className="h-11 rounded-2xl border border-border bg-white px-4 text-sm text-foreground outline-none placeholder:text-foreground/40 focus:border-brand/60"
-                  placeholder="Your phone number"
-                />
-              </label>
-
-              <label className="grid gap-1.5">
-                <span className="text-sm font-semibold text-foreground/80">Email</span>
-                <input
-                  value={form.email}
-                  onChange={(e) => setForm((s) => ({ ...s, email: e.target.value }))}
-                  required
-                  type="email"
-                  className="h-11 rounded-2xl border border-border bg-white px-4 text-sm text-foreground outline-none placeholder:text-foreground/40 focus:border-brand/60"
-                  placeholder="name@company.com"
-                />
-              </label>
-
-              <div className="grid gap-2">
-                <div className="text-sm font-semibold text-foreground/80">Package</div>
-                <div className="grid gap-2 sm:grid-cols-2">
-                  <label
-                    className={cn(
-                      "we-button flex h-11 cursor-pointer items-center justify-center gap-2 rounded-2xl border border-border bg-white px-4 text-sm font-semibold text-foreground transition hover:bg-white/80",
-                      form.package === "adventure" ? "border-brand/60 ring-2 ring-brand/20" : "",
-                    )}
-                  >
-                    <input
-                      type="radio"
-                      name="package"
-                      value="adventure"
-                      checked={form.package === "adventure"}
-                      onChange={() => setForm((s) => ({ ...s, package: "adventure" }))}
-                      className="sr-only"
-                    />
-                    <Icon className="text-foreground" path="M3 20l7-12 4 7 3-5 4 10H3z" />
-                    <span>Adventure</span>
-                  </label>
-                  <label
-                    className={cn(
-                      "we-button flex h-11 cursor-pointer items-center justify-center gap-2 rounded-2xl border border-border bg-white px-4 text-sm font-semibold text-foreground transition hover:bg-white/80",
-                      form.package === "resort" ? "border-brand/60 ring-2 ring-brand/20" : "",
-                    )}
-                  >
-                    <input
-                      type="radio"
-                      name="package"
-                      value="resort"
-                      checked={form.package === "resort"}
-                      onChange={() => setForm((s) => ({ ...s, package: "resort" }))}
-                      className="sr-only"
-                    />
-                    <Icon
-                      className="text-foreground"
-                      path="M4 21V5a2 2 0 012-2h7a2 2 0 012 2v16M9 21V7M13 21v-8M20 21V11a2 2 0 00-2-2h-4"
-                    />
-                    <span>Resort</span>
-                  </label>
                 </div>
               </div>
-
-              <button
-                type="submit"
-                disabled={submitState === "submitting" || submitState === "success"}
-                className="we-button inline-flex h-12 w-full items-center justify-center rounded-full bg-brand px-7 text-sm font-semibold text-white shadow-[0_20px_70px_rgba(0,0,0,0.25)] transition duration-300 hover:bg-brand-hover"
-              >
-                {submitState === "submitting" ? "Saving..." : submitState === "success" ? "Saved" : "Submit"}
-              </button>
-              </form>
-              </div>
-            </div>
-          </div>
-        </div>
-      ) : null}
+            </div>,
+            document.body,
+          )
+        : null}
     </section>
   );
 }

@@ -335,16 +335,12 @@ export default function Header({ brandName }: HeaderProps) {
       <div
         id="mobile-menu"
         className={[
-          "md:hidden",
+          "absolute inset-x-0 top-full md:hidden",
           open ? "pointer-events-auto opacity-100" : "pointer-events-none opacity-0",
         ].join(" ")}
       >
-        <div
-          className="absolute inset-0 -z-10 bg-black/20"
-          onClick={closeMenu}
-          aria-hidden="true"
-        />
-        <div className="mx-auto w-full max-w-6xl px-5">
+        <div className="fixed inset-0 bg-black/20" onClick={closeMenu} aria-hidden="true" />
+        <div className="relative mx-auto w-full max-w-6xl px-5">
           <div className="mt-2 overflow-hidden rounded-3xl border border-border bg-white/90 shadow-[0_30px_80px_rgba(15,23,42,0.14)] backdrop-blur transition">
             <div className="grid gap-1 p-3 text-base font-semibold text-foreground/80">
               <Link

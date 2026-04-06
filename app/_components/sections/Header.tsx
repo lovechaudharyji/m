@@ -421,10 +421,10 @@ export default function Header({ brandName }: HeaderProps) {
             </div>
 
             <div className="flex items-center gap-3 border-t border-border p-3">
-              <Link
-                href="/#booking"
+              <button
+                type="button"
                 className="we-button inline-flex h-11 flex-1 items-center justify-center rounded-2xl border border-border bg-white px-4 text-sm font-semibold text-foreground shadow-sm transition hover:bg-white/80"
-                onClick={closeMenu}
+                onClick={openContact}
               >
                 <span className="inline-flex items-center justify-center gap-2">
                   <Icon
@@ -433,7 +433,7 @@ export default function Header({ brandName }: HeaderProps) {
                   />
                   <span>Talk to Expert</span>
                 </span>
-              </Link>
+              </button>
             </div>
           </div>
         </div>

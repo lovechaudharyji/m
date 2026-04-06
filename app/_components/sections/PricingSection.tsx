@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { cn, Icon, Reveal } from "@/app/_components/shared";
+import Link from "next/link";
 
 type Plan = {
   title: string;
@@ -298,7 +299,7 @@ export default function PricingSection() {
                       <span>See Price</span>
                     </span>
                   </button>
-                  <a
+                  <Link
                     href={plan.icon === "hotel" ? "/comfort" : "/adventure"}
                     className="we-button inline-flex h-12 w-full items-center justify-center rounded-full border border-border bg-white px-7 text-sm font-semibold text-foreground shadow-sm transition hover:bg-white/80"
                   >
@@ -306,7 +307,7 @@ export default function PricingSection() {
                       <Icon className="text-foreground" path="M14 3h7v7 M10 14L21 3 M5 7h4 M5 12h6 M5 17h10" />
                       <span>Read More</span>
                     </span>
-                  </a>
+                  </Link>
                 </div>
               </Reveal>
             );
@@ -332,7 +333,7 @@ export default function PricingSection() {
                   >
                     <div className="flex items-center justify-between border-b border-border px-6 py-5">
                       <div>
-                        <div className="font-heading text-lg font-extrabold text-navy">Talk to Expert</div>
+                        <div className="font-heading text-lg font-extrabold text-navy">Fill out the form to See the price</div>
                         <div className="mt-0.5 text-sm font-semibold text-foreground/60">
                           Fill your details and select a package.
                         </div>

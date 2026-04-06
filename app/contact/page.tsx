@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { motion } from "framer-motion";
 import { ChevronDown, Mail, Phone } from "lucide-react";
+import Image from "next/image";
 import Header from "@/app/_components/sections/Header";
 import FooterSection from "@/app/_components/sections/FooterSection";
 
@@ -44,28 +45,9 @@ function LinkedInIcon() {
 
 function ContactHero() {
   return (
-    <section className="relative flex min-h-[85vh] items-center justify-center overflow-hidden bg-[linear-gradient(135deg,#0f172a_0%,#0b3b63_55%,#0ea5e9_100%)] pt-24">
+    <section className="relative flex min-h-[85vh] items-center justify-center overflow-hidden pt-24">
       <div className="absolute inset-0 overflow-hidden">
-        <motion.div
-          animate={{ x: [0, 30, 0], y: [0, -20, 0] }}
-          transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
-          className="absolute left-1/4 top-1/4 h-[500px] w-[500px] rounded-full opacity-30 blur-[120px]"
-          style={{ background: "hsl(200 95% 60%)" }}
-        />
-        <motion.div
-          animate={{ x: [0, -20, 0], y: [0, 30, 0] }}
-          transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
-          className="absolute bottom-1/4 right-1/4 h-[420px] w-[420px] rounded-full opacity-20 blur-[120px]"
-          style={{ background: "hsl(190 90% 55%)" }}
-        />
-        <div
-          className="absolute inset-0 opacity-[0.06]"
-          style={{
-            backgroundImage:
-              "linear-gradient(rgba(255,255,255,1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,1) 1px, transparent 1px)",
-            backgroundSize: "60px 60px",
-          }}
-        />
+        <Image src="/images/train.jpg" alt="" fill priority sizes="100vw" className="object-cover" />
       </div>
 
       <div className="relative z-10 mx-auto w-full max-w-6xl px-5 text-center">
@@ -181,6 +163,8 @@ function ContactInfo() {
     };
   }, []);
 
+  const isLoading = remoteNumbers === null || remoteEmails === null;
+
   const numbers = useMemo(() => (remoteNumbers && remoteNumbers.length ? remoteNumbers : ["9643906583"]), [remoteNumbers]);
   const emails = useMemo(
     () => (remoteEmails && remoteEmails.length ? remoteEmails : ["mountauraofficial@gmail.com"]),
@@ -240,20 +224,29 @@ function ContactInfo() {
       <div className="grid grid-cols-2 gap-4 sm:gap-6 lg:grid-cols-4">
         {contactItems.map((item, i) => (
           <motion.a
-            key={`${item.label}-${item.value}-${i}`}
-            href={item.href}
+            key={`${item.label}-${i}`}
+            href={isLoading ? undefined : item.href}
             initial={{ opacity: 0, y: 18 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.4, delay: i * 0.06 }}
-            className="we-button rounded-2xl border border-border bg-card p-4 text-center shadow-sm transition hover:-translate-y-0.5 hover:shadow-md sm:p-6"
+            aria-disabled={isLoading}
+            tabIndex={isLoading ? -1 : 0}
+            className={[
+              "we-button rounded-2xl border border-border bg-card p-4 text-center shadow-sm transition sm:p-6",
+              isLoading ? "pointer-events-none" : "hover:-translate-y-0.5 hover:shadow-md",
+            ].join(" ")}
           >
             <div className="mx-auto mb-3 grid h-12 w-12 place-items-center rounded-2xl bg-brand/20 sm:mb-4 sm:h-14 sm:w-14">
               <item.icon className="h-5 w-5 text-brand" />
             </div>
             <h3 className="font-heading text-sm font-extrabold text-foreground sm:text-lg">{item.label}</h3>
             <p className="mt-2 break-all text-xs font-semibold leading-relaxed text-foreground/70 sm:text-sm">
-              {item.value}
+              {isLoading ? (
+                <span className="mx-auto block h-3 w-24 animate-pulse rounded bg-foreground/10 sm:h-4 sm:w-32" />
+              ) : (
+                item.value
+              )}
             </p>
           </motion.a>
         ))}

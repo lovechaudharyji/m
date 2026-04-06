@@ -39,7 +39,7 @@ const plans: Plan[] = [
   {
     title: "Resort Plan",
     icon: "hotel",
-    subtitle: "2 Nights / 3 Days Plan",
+    subtitle: "4 Nights / 3 Days Plan",
     price: "₹6,999",
     earlyBird: "₹5,799",
     features: [

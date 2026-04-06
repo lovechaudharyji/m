@@ -10,6 +10,14 @@ type AirtableRecord = {
   createdTime?: string;
 };
 
+type AirtableAttachment = {
+  id?: string;
+  url?: string;
+  filename?: string;
+  type?: string;
+  thumbnails?: unknown;
+};
+
 const readStringField = (fields: Record<string, unknown> | undefined, candidates: readonly string[]) => {
   if (!fields) return undefined;
   for (const key of candidates) {
@@ -21,6 +29,28 @@ const readStringField = (fields: Record<string, unknown> | undefined, candidates
     if (typeof value === "number") {
       return String(value);
     }
+  }
+  return undefined;
+};
+
+const readAttachmentField = (
+  fields: Record<string, unknown> | undefined,
+  candidates: readonly string[],
+): { url: string; filename?: string; thumbnailUrl?: string } | undefined => {
+  if (!fields) return undefined;
+  for (const key of candidates) {
+    const value = fields[key];
+    if (!Array.isArray(value) || value.length === 0) continue;
+    const first = value[0] as AirtableAttachment | undefined;
+    const url = typeof first?.url === "string" ? first.url.trim() : "";
+    if (!url) continue;
+    const filename = typeof first?.filename === "string" ? first.filename.trim() : undefined;
+    const thumbnails = first?.thumbnails as Record<string, unknown> | undefined;
+    const small = thumbnails?.small as Record<string, unknown> | undefined;
+    const large = thumbnails?.large as Record<string, unknown> | undefined;
+    const thumbnailUrl =
+      (typeof small?.url === "string" ? small.url.trim() : "") || (typeof large?.url === "string" ? large.url.trim() : "") || undefined;
+    return { url, filename, thumbnailUrl };
   }
   return undefined;
 };
@@ -75,6 +105,26 @@ export async function GET() {
     })
     .filter((c) => Boolean(c.number || c.email));
 
-  return Response.json({ contacts });
-}
+  const pdfs = records
+    .map((r) => {
+      const attachment = readAttachmentField(r.fields, ["Pdf", "PDF", "pdf", "Itinerary PDF", "Itinerary"]);
+      if (!attachment) return undefined;
+      const title = readStringField(r.fields, ["Record Name", "Name", "Title"]) ?? "Itinerary";
+      const filename = attachment.filename;
+      const thumbnailUrl = attachment.thumbnailUrl;
+      if (filename && thumbnailUrl) return { title, url: attachment.url, filename, thumbnailUrl };
+      if (filename) return { title, url: attachment.url, filename };
+      if (thumbnailUrl) return { title, url: attachment.url, thumbnailUrl };
+      return { title, url: attachment.url };
+    })
+    .filter((p): p is { title: string; url: string; filename?: string; thumbnailUrl?: string } => Boolean(p?.url));
 
+  const seen = new Set<string>();
+  const uniquePdfs = pdfs.filter((p) => {
+    if (seen.has(p.url)) return false;
+    seen.add(p.url);
+    return true;
+  });
+
+  return Response.json({ contacts, pdfs: uniquePdfs });
+}

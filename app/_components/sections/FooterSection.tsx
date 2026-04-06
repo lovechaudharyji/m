@@ -51,6 +51,7 @@ export default function FooterSection({ brandName, socialLinks }: FooterSectionP
     ...socialLinks,
   };
 
+  const [contactLoading, setContactLoading] = useState(true);
   const [remoteNumber, setRemoteNumber] = useState<string | null>(null);
   const [remoteEmail, setRemoteEmail] = useState<string | null>(null);
 
@@ -60,22 +61,27 @@ export default function FooterSection({ brandName, socialLinks }: FooterSectionP
     const run = async () => {
       try {
         const res = await fetch("/api/contact", { cache: "no-store" });
-        if (!res.ok) return;
-        const data = (await res.json()) as ContactApiResponse;
-        const contacts = data.contacts ?? [];
+        if (res.ok) {
+          const data = (await res.json()) as ContactApiResponse;
+          const contacts = data.contacts ?? [];
 
-        const number = contacts
-          .map((c) => c.number?.trim())
-          .find((v): v is string => Boolean(v));
+          const number = contacts
+            .map((c) => c.number?.trim())
+            .find((v): v is string => Boolean(v));
 
-        const email = contacts
-          .map((c) => c.email?.trim())
-          .find((v): v is string => Boolean(v));
+          const email = contacts
+            .map((c) => c.email?.trim())
+            .find((v): v is string => Boolean(v));
 
+          if (cancelled) return;
+          if (number) setRemoteNumber(number);
+          if (email) setRemoteEmail(email);
+        }
+      } catch {
+      } finally {
         if (cancelled) return;
-        if (number) setRemoteNumber(number);
-        if (email) setRemoteEmail(email);
-      } catch {}
+        setContactLoading(false);
+      }
     };
 
     run();
@@ -162,14 +168,29 @@ export default function FooterSection({ brandName, socialLinks }: FooterSectionP
               </div>
 
               <div className="mt-4 grid gap-2 text-sm font-semibold text-foreground/70">
-                <a className="inline-flex items-center gap-2 transition hover:text-foreground" href={`tel:+91${phoneNumber}`}>
-                  <Icon className="text-brand" path="M22 16.92v3a2 2 0 01-2.18 2 19.86 19.86 0 01-8.63-3.07 19.5 19.5 0 01-6-6A19.86 19.86 0 012.08 4.18 2 2 0 014.06 2h3a2 2 0 012 1.72c.12.86.31 1.7.57 2.5a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.58-1.58a2 2 0 012.11-.45c.8.26 1.64.45 2.5.57A2 2 0 0122 16.92z" />
-                  <span>{phoneNumber}</span>
-                </a>
-                <a className="inline-flex items-center gap-2 transition hover:text-foreground" href={`mailto:${emailAddress}`}>
-                  <Icon className="text-brand" path="M4 4h16v16H4z M22 6l-10 7L2 6" />
-                  <span>{emailAddress}</span>
-                </a>
+                {contactLoading ? (
+                  <div className="grid gap-2">
+                    <div className="inline-flex items-center gap-2">
+                      <Icon className="text-brand" path="M22 16.92v3a2 2 0 01-2.18 2 19.86 19.86 0 01-8.63-3.07 19.5 19.5 0 01-6-6A19.86 19.86 0 012.08 4.18 2 2 0 014.06 2h3a2 2 0 012 1.72c.12.86.31 1.7.57 2.5a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.58-1.58a2 2 0 012.11-.45c.8.26 1.64.45 2.5.57A2 2 0 0122 16.92z" />
+                      <span className="h-4 w-28 animate-pulse rounded bg-foreground/10" />
+                    </div>
+                    <div className="inline-flex items-center gap-2">
+                      <Icon className="text-brand" path="M4 4h16v16H4z M22 6l-10 7L2 6" />
+                      <span className="h-4 w-44 animate-pulse rounded bg-foreground/10" />
+                    </div>
+                  </div>
+                ) : (
+                  <>
+                    <a className="inline-flex items-center gap-2 transition hover:text-foreground" href={`tel:+91${phoneNumber}`}>
+                      <Icon className="text-brand" path="M22 16.92v3a2 2 0 01-2.18 2 19.86 19.86 0 01-8.63-3.07 19.5 19.5 0 01-6-6A19.86 19.86 0 012.08 4.18 2 2 0 014.06 2h3a2 2 0 012 1.72c.12.86.31 1.7.57 2.5a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.58-1.58a2 2 0 012.11-.45c.8.26 1.64.45 2.5.57A2 2 0 0122 16.92z" />
+                      <span>{phoneNumber}</span>
+                    </a>
+                    <a className="inline-flex items-center gap-2 transition hover:text-foreground" href={`mailto:${emailAddress}`}>
+                      <Icon className="text-brand" path="M4 4h16v16H4z M22 6l-10 7L2 6" />
+                      <span>{emailAddress}</span>
+                    </a>
+                  </>
+                )}
                 <div className="mt-2 flex items-center gap-2">
                   <Icon className="text-brand" path="M21 15a4 4 0 01-4 4H7l-4 4V7a4 4 0 014-4h10a4 4 0 014 4z" />
                   <span>Instant confirmation on WhatsApp</span>

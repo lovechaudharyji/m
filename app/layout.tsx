@@ -3,8 +3,9 @@ import "./globals.css";
 import { PageLoadGate } from "./_components/shared";
 
 export const metadata: Metadata = {
-  title: "MountAura",
-  description: "Weekend escapes for busy professionals.",
+  // Step 1: Global metadata applied to every route in the App Router.
+  title: "Mountaura",
+  description: "Travel and adventure experiences",
   icons: {
     icon: [{ url: "/images/mountaura.png", type: "image/png", sizes: "32x32" }],
     shortcut: [{ url: "/images/mountaura.png", type: "image/png", sizes: "32x32" }],
